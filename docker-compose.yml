@@ -1,0 +1,136 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    volumes:
+      - ./backend:/app                          # Mapeia o código do backend
+    ports:
+      - "8000:8000"                             # Porta para acessar o backend
+    depends_on:
+      - db
+      - blockchain
+      - vault
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      BLOCKCHAIN_URL: ${BLOCKCHAIN_URL}
+      VAULT_ADDR: ${VAULT_ADDR}
+    env_file:
+      - .env                                    # Variáveis sensíveis do backend
+    networks:
+      - transcendence
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - ./nginx/frontend:/usr/share/nginx/html        # Mapeia arquivos do frontend
+    ports:
+      - "3000:80"                               # Porta para acessar o frontend
+    depends_on:
+      - backend
+    networks:
+      - transcendence
+
+  blockchain:
+    build:
+      context: ./blockchain
+    volumes:
+      - ./blockchain/contracts:/contracts       # Mapeia contratos inteligentes
+      - ./blockchain/scripts:/scripts           # Mapeia scripts de deploy
+    ports:
+      - "8545:8545"                             # Porta para conectar ao Ganache
+    networks:
+      - transcendence
+
+  db:
+    image: postgres:13
+    volumes:
+      - db_data:/var/lib/postgresql/data        # Volume persistente do banco
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"                             # Porta para o banco de dados
+    env_file:
+      - .env                                    # Variáveis sensíveis para o banco
+    networks:
+      - transcendence
+
+  vault:
+    build:
+      context: ./vault
+    container_name: vault
+    volumes:
+      - vault_data:/vault/data                  # Volume persistente do Vault
+    ports:
+      - "8200:8200"                             # Porta para acessar o Vault
+    cap_add:
+      - IPC_LOCK                                # Requisito do Vault
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_ROOT_TOKEN_ID}
+      VAULT_ADDR: ${VAULT_ADDR}
+    networks:
+      - transcendence
+
+  elasticsearch:
+    build:
+      context: ./elk/elasticsearch
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data      # Volume para dados
+    ports:
+      - "9200:9200"                                           # Porta para acessar o Elasticsearch
+    networks:
+      - transcendence
+
+  kibana:
+    build:
+      context: ./elk/kibana
+    ports:
+      - "5601:5601"                                           # Porta para acessar o Kibana
+    depends_on:
+      - elasticsearch
+    networks:
+      - transcendence
+
+  logstash:
+    build:
+      context: ./elk/logstash
+    volumes:
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline
+      - logs:/var/log/logstash                                # Volume para logs
+    ports:
+      - "5044:5044"                                           # Porta para receber logs via Beats
+    depends_on:
+      - elasticsearch
+    networks:
+      - transcendence
+
+  prometheus:
+    build:
+      context: ./prometheus
+    volumes:
+      - prometheus_data:/prometheus                           # Volume persistente para métricas
+    ports:
+      - "9090:9090"                                           # Porta para acessar o Prometheus
+    networks:
+      - transcendence
+
+volumes:
+  db_data:                                                    # Volume persistente para PostgreSQL
+    driver: local
+  vault_data:                                                 # Volume persistente para o Vault
+    driver: local
+  elasticsearch_data:                                         # Volume persistente para Elasticsearch
+    driver: local
+  logs:                                                       # Volume persistente para logs
+    driver: local
+  prometheus_data:                                            # Volume persistente para Prometheus
+    driver: local
+
+networks:
+  transcendence:
+    driver: bridge
