@@ -1,0 +1,3 @@
+- consegui implementar um modSecurity robusto com o sistema de segurança do nginx
+- coloquei as regras do OWASP CRS deixando o servidor bem protegido contra a maioria das ameaças comuns, como **SQL Injection, XSS, LFI, RFI**, entre outras.
+- são mais de 800 regras para proteção do servidor... incluindo rastreio de requests e analises de response... para saber se algo a + ta sendo mandado como resposta
