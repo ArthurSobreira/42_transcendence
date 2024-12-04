@@ -1,0 +1,22 @@
+# Usar a imagem do PostgreSQL oficial
+FROM postgres:13
+
+# Copiar o script de inicialização personalizado (entrypoint.sh)
+COPY entrypoint.sh /entrypoint.sh
+
+# Copiar o script init.sql para o diretório de inicialização do PostgreSQL
+COPY init.sql /docker-entrypoint-initdb.d/
+
+# Garantir que o script entrypoint.sh tenha permissão de execução
+RUN chmod +x /entrypoint.sh
+
+# Configurar variáveis de ambiente (opcional)
+ENV POSTGRES_USER=admin
+ENV POSTGRES_PASSWORD=admin_password
+ENV POSTGRES_DB=postgres
+
+# Expor a porta padrão
+EXPOSE 5432
+
+# Definir o entrypoint para o script customizado
+ENTRYPOINT ["/entrypoint.sh"]
