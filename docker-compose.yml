@@ -11,9 +11,9 @@ services:
       - blockchain
       - vault
     environment:
-      DATABASE_URL: ${DATABASE_URL}
-      BLOCKCHAIN_URL: ${BLOCKCHAIN_URL}
-      VAULT_ADDR: ${VAULT_ADDR}
+      DATABASE_URL: postgresql://backend_user:backend_password@db:5432/backend_db
+      BLOCKCHAIN_URL: http://blockchain:8545
+      VAULT_ADDR: http://vault:8200
     env_file:
       - .env                                    # Variáveis sensíveis do backend
     networks:
@@ -23,7 +23,7 @@ services:
     build:
       context: ./nginx
     volumes:
-      - ./nginx/frontend:/usr/share/nginx/html        # Mapeia arquivos do frontend
+      - ./nginx/frontend:/usr/share/nginx/html  # Mapeia arquivos do frontend
     ports:
       - "3000:80"                               # Porta para acessar o frontend
     depends_on:
@@ -43,38 +43,50 @@ services:
       - transcendence
 
   db:
-    image: postgres:13
+    build:
+      context: ./db                             # Diretório contendo o Dockerfile e scripts SQL
     volumes:
-      - db_data:/var/lib/postgresql/data        # Volume persistente do banco
+      - ./volumes/db_data:/var/lib/postgresql/data        # Volume persistente do banco
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: postgres                   # Usuário principal do banco
+      POSTGRES_PASSWORD: postgres_password      # Senha principal
+      POSTGRES_DB: postgres                     # Banco principal
     ports:
       - "5432:5432"                             # Porta para o banco de dados
-    env_file:
-      - .env                                    # Variáveis sensíveis para o banco
+    networks:
+      - transcendence
+    depends_on:
+      - pgadmin
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "8081:80"  # Porta para acessar o pgAdmin no navegador
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com  # Email para login
+      PGADMIN_DEFAULT_PASSWORD: admin          # Senha para login
     networks:
       - transcendence
 
   vault:
-    build:
-      context: ./vault
+    image: vault:1.8.0                             # Usando a imagem oficial do Vault
     container_name: vault
     volumes:
-      - vault_data:/vault/data                  # Volume persistente do Vault
+      - ./vault/config.hcl:/vault/config/config.hcl:ro # Arquivo de configuração do Vault
+      - ./volumes/vault_data:/vault/data                # Volume persistente do Vault
     ports:
-      - "8200:8200"                             # Porta para acessar o Vault
+      - "8200:8200"                                  # Porta para acessar o Vault
     cap_add:
-      - IPC_LOCK                                # Requisito do Vault
+      - IPC_LOCK                                     # Requisito do Vault
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_ROOT_TOKEN_ID}
-      VAULT_ADDR: ${VAULT_ADDR}
+      VAULT_ADDR: http://0.0.0.0:8200
+    command: vault server -config=/vault/config/config.hcl
     networks:
       - transcendence
+    restart: always
+
 
   elasticsearch:
     build:
