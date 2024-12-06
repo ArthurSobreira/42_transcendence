@@ -26,8 +26,8 @@ services:
       - ./nginx/frontend:/usr/share/nginx/html  # Mapeia arquivos do frontend
     ports:
       - "3000:80"                               # Porta para acessar o frontend
-    depends_on:
-      - backend
+    # depends_on:
+    #   - backend
     networks:
       - transcendence
 
@@ -48,15 +48,16 @@ services:
     volumes:
       - ./volumes/db_data:/var/lib/postgresql/data        # Volume persistente do banco
     environment:
-      POSTGRES_USER: postgres                   # Usuário principal do banco
-      POSTGRES_PASSWORD: postgres_password      # Senha principal
-      POSTGRES_DB: postgres                     # Banco principal
+      POSTGRES_USER: ${POSTGRES_USER}    # Variável de ambiente injetada pelo Vault Agent
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"                             # Porta para o banco de dados
     networks:
       - transcendence
     depends_on:
       - pgadmin
+      - vault-agent
 
   pgadmin:
     image: dpage/pgadmin4
@@ -74,7 +75,8 @@ services:
     image: vault:1.8.0                             # Usando a imagem oficial do Vault
     container_name: vault
     volumes:
-      - ./vault/config.hcl:/vault/config/config.hcl:ro # Arquivo de configuração do Vault
+      - ./vault/config/config.hcl:/vault/config/config.hcl:ro # Arquivo de configuração do Vault
+      - ./vault/policies:/vault/policies:ro            # Volume de policies
       - ./volumes/vault_data:/vault/data                # Volume persistente do Vault
     ports:
       - "8200:8200"                                  # Porta para acessar o Vault
@@ -87,6 +89,28 @@ services:
       - transcendence
     restart: always
 
+  vault-agent:
+    image: vault:1.8.0
+    container_name: vault-agent
+    command: "vault agent -config=/vault/config/agent.hcl"
+    volumes:
+      - ./vault/config/agent.hcl:/vault/config/agent.hcl  # Configuração do Vault Agent
+      - ./vault/secrets:/vault/secrets                    # Onde os segredos serão injetados
+      - ./vault/agent:/vault/agent                        # Contém role_id e secret_id
+      - ./vault/templates:/vault/templates                # Templates do Consul Template
+    environment:
+      VAULT_ADDR: http://vault:8200
+    networks:
+      - transcendence
+    depends_on:
+      - vault
+    restart: always
+    cap_add:
+      - IPC_LOCK
+
+
+
+ 
 
   elasticsearch:
     build:

@@ -11,10 +11,6 @@ COPY init.sql /docker-entrypoint-initdb.d/
 RUN chmod +x /entrypoint.sh
 
 # Configurar variáveis de ambiente (opcional)
-ENV POSTGRES_USER=admin
-ENV POSTGRES_PASSWORD=admin_password
-ENV POSTGRES_DB=postgres
-
 # Expor a porta padrão
 EXPOSE 5432
 
