@@ -1,4 +1,0 @@
-# Template para gerar variáveis de ambiente para o PostgreSQL
-export POSTGRES_USER="{{ with secret "secret/envs/trancendece_root_user" }}{{ .Data.username }}{{ end }}"
-export POSTGRES_PASSWORD="{{ with secret "secret/envs/trancendece_root_user" }}{{ .Data.password }}{{ end }}"
-export POSTGRES_DB=transcendence
