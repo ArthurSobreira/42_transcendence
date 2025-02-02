@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mandatory</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
+        }
+        .bar {
+            width: 20px;
+            height: 100px;
+            background-color: black;
+            position: absolute;
+        }
+        #left-bar {
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        #right-bar {
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="left-bar" class="bar"></div>
+    <div id="right-bar" class="bar"></div>
+    <script>
+        let leftBar = document.getElementById("left-bar");
+        let rightBar = document.getElementById("right-bar");
+        let leftY = window.innerHeight / 2 - 50;
+        let rightY = window.innerHeight / 2 - 50;
+        let speed = 10;  // Ajuste a velocidade aqui
+        let keys = {};
+
+        document.addEventListener("keydown", (event) => {
+            keys[event.key] = true;
+        });
+
+        document.addEventListener("keyup", (event) => {
+            keys[event.key] = false;
+        });
+
+        function moveBars() {
+            if (keys["w"] || keys["W"]) {
+                leftY = Math.max(0, leftY - speed);
+            }
+            if (keys["s"] || keys["S"]) {
+                leftY = Math.min(window.innerHeight - 100, leftY + speed);
+            }
+            if (keys["ArrowUp"]) {
+                rightY = Math.max(0, rightY - speed);
+            }
+            if (keys["ArrowDown"]) {
+                rightY = Math.min(window.innerHeight - 100, rightY + speed);
+            }
+
+            leftBar.style.top = leftY + "px";
+            rightBar.style.top = rightY + "px";
+
+            requestAnimationFrame(moveBars);
+        }
+
+        moveBars();
+    </script>
+</body>
+</html>

@@ -28,5 +28,6 @@ urlpatterns = [
     path('auth/42/', oauth.oauth42, name='oauth42'),
     path('auth/42/callback/', oauth.callbackAuth, name='callbackAuth'),
     path('logout/', views.logout, name='logout'),
-    path('dashboard/', views.dashboard, name='dashboard')
+    path('dashboard/', views.dashboard, name='dashboard'),
+	path('mandatory/', views.mandatory, name='mandatory')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
