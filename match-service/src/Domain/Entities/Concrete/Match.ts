@@ -3,7 +3,6 @@ import { MatchEnded } from "../../Events/MatchEnded.js"
 import { ScoreVO } from "../../ValueObjects/ScoreVO.js"
 import { MatchStatus } from "../../Enums/MatchStatus.js";
 import crypto from 'crypto'
-import { throwDeprecation } from "process";
 
 export class Match implements BaseEntity
 {
