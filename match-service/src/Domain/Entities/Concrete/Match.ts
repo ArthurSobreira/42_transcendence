@@ -1,8 +1,8 @@
-import { BaseEntity } from "../Interface/BaseEntity.js";
-import { MatchEnded } from "../../Events/MatchEnded.js"
-import { ScoreVO } from "../../ValueObjects/ScoreVO.js"
-import { MatchStatus } from "../../Enums/MatchStatus.js";
-import crypto from 'crypto'
+import { BaseEntity } from "../Interface/BaseEntity";
+import { MatchEnded } from "../../Events/MatchEnded";
+import { ScoreVO } from "../../ValueObjects/ScoreVO";
+import { MatchStatus } from "../../Enums/MatchStatus";
+import crypto from 'crypto';
 
 export class Match implements BaseEntity
 {
@@ -19,12 +19,11 @@ export class Match implements BaseEntity
 
     constructor(
         player1Uuid: string,
-        player2Uuid: string | null,
     )
     {
         this.Uuid = crypto.randomUUID();
         this.Player1Uuid = player1Uuid;
-        this.Player2Uuid = player2Uuid;
+        this.Player2Uuid = null;
         this.WinnerID = null;
         this.Score = ScoreVO.create();
         this.StartedAt = null;
