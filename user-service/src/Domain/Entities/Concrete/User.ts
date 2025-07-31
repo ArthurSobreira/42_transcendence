@@ -87,7 +87,7 @@ export class User implements BaseEntity
         return this.twoFactorEnabled;
     }
 
-    public set EnableTwoFA(secret: string): void
+    public EnableTwoFA(secret: string): void
     {
         this.twoFactorSecret = secret;
         this.twoFactorEnabled = true;

@@ -7,14 +7,31 @@ import {ErrorTypeEnum} from "../../Enums/ErrorTypeEnum.js";
 import {ErrorCatalog} from "../../../Shared/Errors/ErrorCatalog.js";
 import {Generate2FaQueryHandler} from "../../../Domain/Queries/Handlers/Generate2FaQueryHandler.js";
 import {Generate2FaQueryValidator} from "../../../Domain/Queries/Validators/Generate2FaQueryValidator.js";
+import {EnableTwoFaCommandValidator} from "../../../Domain/Command/Validators/EnableTwoFaCommandValidator.js";
+import {EnableTwoFaCommandHandler} from "../../../Domain/Command/Handlers/EnableTwoFaCommandHandler.js";
+import {DisableTwoFaCommandHandler} from "../../../Domain/Command/Handlers/DisableTwoFaCommandHandler.js";
+import {EnableTwoFaDTO} from "../../DTO/ToCommand/EnableTwoFaDTO.js";
+import {EnableTwoFaCommand} from "../../../Domain/Command/CommandObject/EnableTwoFaCommand.js";
+import {DisableTwoFaCommand} from "../../../Domain/Command/CommandObject/DisableTwoFaCommand.js";
+import {DisableTwoFaDTO} from "../../DTO/ToCommand/DisableTwoFaDTO.js";
 
 export class TwoFAService implements BaseService<any, boolean>
 {
+    private EnableTwoFaHandler: EnableTwoFaCommandHandler;
+    private EnableTwoFaValidator: EnableTwoFaCommandValidator
+    private DisableTwoFaHandler: DisableTwoFaCommandHandler;
+    private DisableTwoFaValidator: EnableTwoFaCommandValidator;
     private Generate2FaHandler: Generate2FaQueryHandler;
     private Generate2FaValidator: Generate2FaQueryValidator
+
     constructor(private userRepository: UserRepository, notificationError: NotificationError)
     {
-
+        this.EnableTwoFaHandler = new EnableTwoFaCommandHandler(userRepository, notificationError);
+        this.EnableTwoFaValidator = new EnableTwoFaCommandValidator(userRepository, notificationError);
+        this.DisableTwoFaHandler = new DisableTwoFaCommandHandler(userRepository, notificationError);
+        this.DisableTwoFaValidator = new EnableTwoFaCommandValidator(userRepository, notificationError);
+        this.Generate2FaHandler = new Generate2FaQueryHandler(userRepository, notificationError);
+        this.Generate2FaValidator = new Generate2FaQueryValidator(userRepository, notificationError);
     }
 
     Execute(dto: any, reply): Promise<Result<boolean>> {
