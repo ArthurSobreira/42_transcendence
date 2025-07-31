@@ -2,7 +2,7 @@ import {BaseValidator} from "../../Command/Validators/BaseValidator.js";
 import {CustomError} from "../../../Shared/Errors/CustomError.js";
 import {ValidationException} from "../../../Shared/Errors/ValidationException.js";
 
-export class Generate2FaSetupValidator implements BaseValidator<Generate2FaSetupQuery>
+export class Generate2FaQueryValidator implements BaseValidator<Generate2FaSetupQuery>
 {
     private UserRepository: UserRepository;
     private NotificationError: NotificationError;

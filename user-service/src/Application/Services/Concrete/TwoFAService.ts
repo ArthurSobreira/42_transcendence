@@ -5,9 +5,13 @@ import {Result} from "../../../Shared/Utils/Result.js";
 import {ValidationException} from "../../../Shared/Errors/ValidationException.js";
 import {ErrorTypeEnum} from "../../Enums/ErrorTypeEnum.js";
 import {ErrorCatalog} from "../../../Shared/Errors/ErrorCatalog.js";
+import {Generate2FaQueryHandler} from "../../../Domain/Queries/Handlers/Generate2FaQueryHandler.js";
+import {Generate2FaQueryValidator} from "../../../Domain/Queries/Validators/Generate2FaQueryValidator.js";
 
 export class TwoFAService implements BaseService<any, boolean>
 {
+    private Generate2FaHandler: Generate2FaQueryHandler;
+    private Generate2FaValidator: Generate2FaQueryValidator
     constructor(private userRepository: UserRepository, notificationError: NotificationError)
     {
 
@@ -69,8 +73,8 @@ export class TwoFAService implements BaseService<any, boolean>
         {
             let generateSetupViewModel = Generate2FaViewModel | null = null;
             var query: Generate2FaSetupQuery = Generate2FaSetupQuery.fromDTO(uuid);
-            await this.Generate2FaSetupValidator.Validator(query);
-            const generateSetupQueryDTO: Generate2FaQueryDTO = await this.Generate2FaSetupHandler.Handle(query);
+            await this.Generate2FaValidator.Validator(query);
+            const generateSetupQueryDTO: Generate2FaQueryDTO = await this.Generate2FaHandler.Handle(query);
 
             if (!generateSetupQueryDTO)
                 return Result.SuccessWithData<Generate2FaViewModel | null>("Doesn't possible to generate 2fa setup, user not found", generateSetupViewModel);
