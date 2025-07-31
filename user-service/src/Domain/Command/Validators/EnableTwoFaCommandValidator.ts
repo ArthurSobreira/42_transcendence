@@ -3,6 +3,8 @@ import {UserRepository} from "../../../Infrastructure/Persistence/Repositories/C
 import {CustomError} from "../../../Shared/Errors/CustomError.js";
 import {ValidationException} from "../../../Shared/Errors/ValidationException.js";
 import { authenticator } from 'otplib';
+import {ErrorCatalog} from "../../../Shared/Errors/ErrorCatalog.js";
+import {EnableTwoFaCommand} from "../CommandObject/EnableTwoFaCommand.js";
 
 export class EnableTwoFaCommandValidator implements BaseValidator<EnableTwoFaCommand>
 {
