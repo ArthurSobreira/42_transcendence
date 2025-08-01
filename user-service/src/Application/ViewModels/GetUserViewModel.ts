@@ -11,10 +11,13 @@ export class GetUserViewModel
     public readonly loses: number | null;
     public readonly isOnline: boolean | null;
     public readonly lastLogin: Date | null;
+    public readonly twoFactorEnabled: boolean | null;
+    public readonly twoFactorSecret: string | null;
 
 
     constructor(uuid?: string, username?: string, email?: string, profilepic: string | null = null,
-                matchesPlayed? : number | null, wins? : number | null, loses? : number | null, isOnline?: boolean | null, lastLogin?: Date | null)
+                matchesPlayed? : number | null, wins? : number | null, loses? : number | null, isOnline?: boolean | null, lastLogin?: Date | null,
+                twoFactorEnabled: boolean | null, twoFactorSecret: string | null = null)
     {
         this.Uuid = uuid ?? null;
         this.Username = username ?? null;
@@ -25,10 +28,14 @@ export class GetUserViewModel
         this.loses = loses ?? null;
         this.isOnline = isOnline ?? null;
         this.lastLogin = lastLogin === undefined ? null : lastLogin;
+        this.twoFactorEnabled = twoFactorEnabled;
+        this.twoFactorSecret = twoFactorSecret;
     }
 
     public static FromQueryDTO(query: GetUserQueryDTO | null): GetUserViewModel
     {
-        return new GetUserViewModel(query?.Uuid, query?.Username, query?.Email, query?.ProfilePic, query?.matchesPlayed, query?.wins, query?.loses, query?.isOnline, query?.lastLogin);
+        return new GetUserViewModel(query?.Uuid, query?.Username, query?.Email, query?.ProfilePic,
+            query?.matchesPlayed, query?.wins, query?.loses, query?.isOnline, query?.lastLogin,
+            query?.twoFactorEnabled, query?.twoFactorSecret);
     }
 }

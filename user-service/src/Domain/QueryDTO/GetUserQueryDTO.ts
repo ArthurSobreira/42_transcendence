@@ -9,8 +9,12 @@ export class GetUserQueryDTO
     public readonly loses: number | null;
     public readonly isOnline: boolean | null;
     public readonly lastLogin: Date | null;
+    public readonly twoFactorEnabled: boolean | null;
+    public readonly twoFactorSecret: string | null;
 
-    constructor(uuid: string, email: string, username: string, profilepic: string | null = null, matchesPlayed: number, wins: number, loses: number, isOnline: boolean, lastLogin: Date | null)
+    constructor(uuid: string, email: string, username: string, profilepic: string | null = null,
+                matchesPlayed: number, wins: number, loses: number, isOnline: boolean, lastLogin: Date | null,
+                twoFactorEnabled: boolean | null, twoFactorSecret: string | null = null)
     {
         this.Uuid = uuid;
         this.Email = email;
@@ -21,5 +25,7 @@ export class GetUserQueryDTO
         this.loses = loses;
         this.isOnline = isOnline;
         this.lastLogin = lastLogin;
+        this.twoFactorEnabled = twoFactorEnabled;
+        this.twoFactorSecret = twoFactorSecret;
     }
 }
