@@ -16,6 +16,7 @@ export class ErrorCatalog
     public static readonly FriendshipNotExists: CustomError = new CustomError(400, "This friendship not exists");
     public static readonly DatabaseViolated: CustomError = new CustomError(400, "A database constraint, like unique, was violated");
     public static readonly InvalidToken2Fa: CustomError = new CustomError(400, "Invalid token for 2FA");
+    public static readonly TwofaNotEnabled: CustomError = new CustomError(400, "2FA is not enabled for this user");
     public static readonly UserNotFound: CustomError = new CustomError(404, "User(s) not found");
     public static readonly InternalServerError: CustomError = new CustomError(500, "Internal server error");
 }
