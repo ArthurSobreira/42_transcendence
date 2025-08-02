@@ -26,6 +26,9 @@ import { CreateUserDTO } from "./Application/DTO/ToCommand/CreateUserDTO.js";
 import {FriendshipController} from "./Presentation/Controllers/FriendshipController.js";
 import {FriendshipRepository} from "./Infrastructure/Persistence/Repositories/Concrete/FriendshipRepository.js";
 import {FriendshipRoutes} from "./Presentation/Routes/FriendshipRoutes/FriendshipRoutes.js";
+import {TwoFARoutes} from "./Presentation/Routes/TwoFARoutes/TwoFARoutes.js";
+import {TwoFAController} from "./Presentation/Controllers/TwoFAController.js";
+import {TwoFAService} from "./Application/Services/Concrete/TwoFAService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -125,6 +128,7 @@ async function main() {
   const verificationService = new UserService(userRepository, notificationError);
   const loginUserService = new LoginUserService(userRepository, notificationError);
   const logoutUserService = new LogoutUserService(userRepository, notificationError);
+  const twoFaService = new TwoFAService(userRepository, notificationError)
 
   const userController = new UserController(
     createUserService,
@@ -141,11 +145,13 @@ async function main() {
   );
 
   const friendshipController = new FriendshipController(friendshipRepository, userRepository);
+  const twoFAController = new TwoFAController(twoFaService);
 
   await UserRoutes(server, userController);
   await UserSessionRoutes(server, userSessionController, userRepository);
   await createDefaultUser(prisma, userRepository, createUserService);
   await FriendshipRoutes(server, friendshipController);
+  await TwoFARoutes(server, twoFAController);
 
   server.setErrorHandler(async (error, request, reply) => {
     console.error("Internal server error:", error);

@@ -38,10 +38,10 @@ export class TwoFAController extends BaseController
         return this.handleResult(result, reply, this.notificationError);
     }
 
-    public async Generate2FaQrcode(request: FastifyRequest<{ Body: { uuid: string } }>, reply: FastifyReply)
+    public async Generate2FaQrcode(request: FastifyRequest<{ Querystring: { uuid: string } }>, reply: FastifyReply)
     {
-        const body = request.body;
-        const result: Result<Generate2FaViewModel | null> = await this.twoFaService.Generate2FaQrcode(body.uuid);
+        const query = request.query;
+        const result: Result<Generate2FaViewModel | null> = await this.twoFaService.Generate2FaQrcode(query.uuid);
         return this.handleResult(result, reply, this.notificationError);
     }
 
@@ -49,7 +49,7 @@ export class TwoFAController extends BaseController
     {
         const query = request.query;
         const verify2FaDTO: Verify2faDTO = new Verify2faDTO(query.uuid, query.code);
-        const result: Result<LoginUserViewModel> = await this.twoFaService.Verify2FaCode(verify2FaDTO);
+        const result: Result<LoginUserViewModel> = await this.twoFaService.Verify2FaCode(verify2FaDTO, request, reply);
         return this.handleResult(result, reply, this.notificationError);
     }
 }

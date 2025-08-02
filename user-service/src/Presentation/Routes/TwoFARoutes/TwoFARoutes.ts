@@ -14,7 +14,7 @@ export const TwoFARoutes = async (server: any, twoFAController: TwoFAController)
         return await twoFAController.DisableTwoFA(request, reply);
     });
 
-    server.get('/generateQrcode', { preHandler: authenticateJWT }, async (request: FastifyRequest <{ Body: { uuid: string } }>, reply: FastifyReply) => {
+    server.get('/generateQrcode', { preHandler: authenticateJWT }, async (request: FastifyRequest <{ Querystring: { uuid: string } }>, reply: FastifyReply) => {
         return await twoFAController.Generate2FaQrcode(request, reply);
     });
 

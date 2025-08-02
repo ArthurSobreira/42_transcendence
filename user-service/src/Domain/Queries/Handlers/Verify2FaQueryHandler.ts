@@ -4,29 +4,24 @@ import {LoginUserViewModel} from "../../../Application/ViewModels/LoginUserViewM
 import {NotificationError} from "../../../Shared/Errors/NotificationError.js";
 import {UserRepository} from "../../../Infrastructure/Persistence/Repositories/Concrete/UserRepository.js";
 import {FastifyReply, FastifyRequest} from "fastify";
+import {Verify2faDTO} from "../../../Application/DTO/ToQuery/Verify2faDTO.js";
 
 export class Verify2FaQueryHandler implements BaseHandlerQuery<Verify2faQuery, LoginUserViewModel>
 {
-    private readonly request: FastifyRequest;
-    private readonly reply: FastifyReply;
-
-    constructor(private UserRepository: UserRepository, request: FastifyRequest <{ Querystring: Verify2faQuery }>,
-                reply: FastifyReply, notificationError: NotificationError)
+    constructor(private UserRepository: UserRepository, notificationError: NotificationError)
     {
-        this.request = request;
-        this.reply = reply;
     }
 
-    async Handle(query: Verify2faQuery): Promise<LoginUserViewModel>
+    async Handle(query: Verify2faQuery, request: FastifyRequest<{ Querystring: Verify2faDTO }>, reply: FastifyReply): Promise<LoginUserViewModel>
     {
         const user = await this.UserRepository.GetUserEntityByUuid(query.uuid);
 
-        const token = this.request.server.jwt.sign({
+        const token = request.server.jwt.sign({
             email: user!.Email.getEmail(),
             isAuthenticated: true,
         }, { expiresIn: '1d' });
 
-        this.reply.setCookie('token', token, {
+        reply.setCookie('token', token, {
             httpOnly: true, // TODO: verificar se isso muda no ultimo merge
             secure: true,
             sameSite: 'lax',

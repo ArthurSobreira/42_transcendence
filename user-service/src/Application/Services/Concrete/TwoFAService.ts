@@ -37,8 +37,7 @@ export class TwoFAService implements BaseService<any, boolean>
     private Verify2FaHandler: Verify2FaQueryHandler;
     private Verify2FaValidator: Verify2FaQueryValidator;
 
-    constructor(private userRepository: UserRepository, request: FastifyRequest <{ Querystring: Verify2faQuery }>,
-                reply: FastifyReply, notificationError: NotificationError)
+    constructor(private userRepository: UserRepository, notificationError: NotificationError)
     {
         this.EnableTwoFaHandler = new EnableTwoFaCommandHandler(userRepository, notificationError);
         this.EnableTwoFaValidator = new EnableTwoFaCommandValidator(userRepository, notificationError);
@@ -47,7 +46,7 @@ export class TwoFAService implements BaseService<any, boolean>
         this.Generate2FaHandler = new Generate2FaQueryHandler(userRepository, notificationError);
         this.Generate2FaValidator = new Generate2FaQueryValidator(userRepository, notificationError);
         this.Verify2FaValidator = new Verify2FaQueryValidator(userRepository, notificationError);
-        this.Verify2FaHandler = new Verify2FaQueryHandler(userRepository, request, reply, notificationError);
+        this.Verify2FaHandler = new Verify2FaQueryHandler(userRepository, notificationError);
     }
 
     Execute(dto: any, reply: any): Promise<Result<boolean>> {
@@ -129,14 +128,14 @@ export class TwoFAService implements BaseService<any, boolean>
         }
     }
 
-    public async Verify2FaCode(dto: Verify2faDTO): Promise<Result<LoginUserViewModel>>
+    public async Verify2FaCode(dto: Verify2faDTO, request: FastifyRequest<{ Querystring: Verify2faDTO }>, reply: FastifyReply): Promise<Result<LoginUserViewModel>>
     {
         try
         {
             var query: Verify2faQuery = Verify2faQuery.fromDTO(dto);
 
             await this.Verify2FaValidator.Validator(query);
-            const result = await this.Verify2FaHandler.Handle(query);
+            const result = await this.Verify2FaHandler.Handle(query, request, reply);
 
             if (!result)
                 return Result.SuccessWithData<LoginUserViewModel>("Error: 2fa isn't unable for this user", result);
