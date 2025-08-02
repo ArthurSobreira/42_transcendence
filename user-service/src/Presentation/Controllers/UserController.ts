@@ -18,6 +18,8 @@ import {UserService} from "../../Application/Services/Concrete/UserService.js";
 import {GetUserDTO} from "../../Application/DTO/ToQuery/GetUserDTO.js";
 import {VerifyIfUsersExistsByUuidsDTO} from "../../Application/DTO/ToQuery/VerifyIfUsersExistsByUuidsDTO.js";
 import {LoginUserViewModel} from "../../Application/ViewModels/LoginUserViewModel.js";
+import {UploadPhotoDTO} from "../../Application/DTO/ToCommand/UploadPhotoDTO.js";
+import {UploadPhotoViewModel} from "../../Application/ViewModels/UploadPhotoViewModel.js";
 
 export class UserController extends BaseController {
   private readonly notificationError: NotificationError;
@@ -145,5 +147,23 @@ export class UserController extends BaseController {
     );
     const result: Result = await this.userService.UpdateStatsService(statsDTO, reply);
     return this.handleResult(result, reply, this.notificationError);
+  }
+
+  public async UploadPhoto(request: FastifyRequest<{ Body: UploadPhotoDTO }>, reply: FastifyReply): Promise<Result>
+  {
+      const data = await request.file();
+
+      if (!data)
+        return this.handleResult(Result.Failure("No file uploaded"), reply, this.notificationError);
+
+      let uuid = '';
+      const fields = data.fields;
+
+      if (fields.uuid && 'value' in fields.uuid)
+          uuid = fields.uuid.value as string;
+
+      const uploadDTO = new UploadPhotoDTO(uuid, data);
+      const result: Result<UploadPhotoViewModel> = await this.userService.UploadPhotoService(uploadDTO, request);
+      return this.handleResult(result, reply, this.notificationError);
   }
 }

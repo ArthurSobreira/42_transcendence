@@ -1,7 +1,7 @@
 import {BaseService} from "../Interfaces/BaseService.js";
 import {UserRepository} from "../../../Infrastructure/Persistence/Repositories/Concrete/UserRepository.js";
 import {NotificationError} from "../../../Shared/Errors/NotificationError.js";
-import {FastifyReply} from "fastify";
+import {FastifyReply, FastifyRequest} from "fastify";
 import {Result} from "../../../Shared/Utils/Result.js";
 import {ValidationException} from "../../../Shared/Errors/ValidationException.js";
 import {Prisma} from "@prisma/client";
@@ -29,6 +29,12 @@ import {
 } from "../../../Domain/Queries/Handlers/VerifyIfUsersExistsByUuidsQueryHandler.js";
 import {VerifyIfUsersExistsByUuidsDTO} from "../../DTO/ToQuery/VerifyIfUsersExistsByUuidsDTO.js";
 import {ErrorTypeEnum} from "../../Enums/ErrorTypeEnum.js";
+import {UploadPhotoCommand} from "../../../Domain/Command/CommandObject/UploadPhotoCommand.js";
+import {UploadPhotoDTO} from "../../DTO/ToCommand/UploadPhotoDTO.js";
+import {UploadPhotoCommandValidator} from "../../../Domain/Command/Validators/UploadPhotoCommandValidator.js";
+import {UploadPhotoCommandHandler} from "../../../Domain/Command/Handlers/UploadPhotoCommandHandler.js";
+import {UploadPhotoQueryDTO} from "../../../Domain/QueryDTO/UploadPhotoQueryDTO.js";
+import {UploadPhotoViewModel} from "../../ViewModels/UploadPhotoViewModel.js";
 
 export class UserService implements BaseService<any,  boolean>
 {
@@ -37,6 +43,8 @@ export class UserService implements BaseService<any,  boolean>
     private VerifyIfUserExistsByUsernameQueryHandler: VerifyUserExistsByUsernameQueryHandler;
     private UpdateStatsValidator: UpdateStatsCommandValidator;
     private UpdateStatsHandler: UpdateStatsCommandHandler;
+    private UploadPhotoValidator: UploadPhotoCommandValidator;
+    private UploadPhotoHandler: UploadPhotoCommandHandler;
 
     constructor(private userRepository: UserRepository, notificationError: NotificationError)
     {
@@ -45,6 +53,8 @@ export class UserService implements BaseService<any,  boolean>
         this.VerifyIfUserExistsByUsernameQueryHandler = new VerifyUserExistsByUsernameQueryHandler(userRepository, notificationError);
         this.UpdateStatsValidator = new UpdateStatsCommandValidator(userRepository, notificationError);
         this.UpdateStatsHandler = new UpdateStatsCommandHandler(userRepository, notificationError);
+        this.UploadPhotoValidator = new UploadPhotoCommandValidator(userRepository, notificationError);
+        this.UploadPhotoHandler = new UploadPhotoCommandHandler(userRepository, notificationError);
     }
 
     Execute(dto: any, reply: FastifyReply): Promise<Result<boolean>> {
@@ -142,7 +152,6 @@ export class UserService implements BaseService<any,  boolean>
         try
         {
             const query: VerifyIfUserExistsByUsernameQuery = VerifyIfUserExistsByUsernameQuery.fromQuery(dto);
-            console.log("Received request to verify if user exists by username:", query.username);
             const exists = await this.VerifyIfUserExistsByUsernameQueryHandler.Handle(query)
 
             if (!exists)
@@ -156,6 +165,32 @@ export class UserService implements BaseService<any,  boolean>
             {
                 const message: string = error.SetErrors();
                 return Result.Failure<false>(message, ErrorTypeEnum.VALIDATION);
+            }
+            else if (error instanceof Prisma.PrismaClientKnownRequestError)
+            {
+                return Result.Failure(ErrorCatalog.DatabaseViolated.SetError(), ErrorTypeEnum.CONFLICT);
+            }
+            return Result.Failure(ErrorCatalog.InternalServerError.SetError(), ErrorTypeEnum.INTERNAL);
+        }
+    }
+
+    public async UploadPhotoService(dto: UploadPhotoDTO, request: FastifyRequest<{ Body: UploadPhotoDTO }>): Promise<Result<UploadPhotoViewModel>>
+    {
+        try
+        {
+            const command: UploadPhotoCommand = UploadPhotoCommand.fromDTO(dto);
+            // await this.UploadPhotoValidator.Validator(command);
+            const photoUploaded: UploadPhotoQueryDTO = await this.UploadPhotoHandler.Handle(command, request);
+
+            const uploadPhotoViewModel: UploadPhotoViewModel = UploadPhotoViewModel.fromQueryDTO(photoUploaded);
+            return Result.SuccessWithData<UploadPhotoViewModel>('Photo uploaded successfully', uploadPhotoViewModel);
+        }
+        catch (error)
+        {
+            if (error instanceof ValidationException)
+            {
+                const message: string = error.SetErrors();
+                return Result.Failure<UploadPhotoViewModel>(message, ErrorTypeEnum.VALIDATION);
             }
             else if (error instanceof Prisma.PrismaClientKnownRequestError)
             {
