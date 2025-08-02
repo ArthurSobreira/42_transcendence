@@ -144,7 +144,7 @@ export const UserRoutes = async (server: any, userController: UserController) =>
         return await userController.UpdateStats(request, reply);
     });
 
-    server.put('/uploadPhoto', async (request: FastifyRequest<{ Body: UploadPhotoDTO }>, reply: FastifyReply) => {
+    server.put('/uploadPhoto', { preHandler: authenticateJWT }, async (request: FastifyRequest<{ Body: UploadPhotoDTO }>, reply: FastifyReply) => {
         return await userController.UploadPhoto(request, reply);
     });
 }

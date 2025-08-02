@@ -124,7 +124,9 @@ export class UserRepository implements IBaseRepository<GetUserQueryDTO, User> {
     }
 
     public async GetUserEntityByUuid(uuid: string): Promise<User | null> {
-        const userData = await this.prisma.user.findUnique({where: {uuid}});
+        const userData = await this.prisma.user.findUnique({
+            where: { uuid: uuid },
+        });
 
         if (!userData)
             return null;

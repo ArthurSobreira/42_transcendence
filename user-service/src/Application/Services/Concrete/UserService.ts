@@ -179,7 +179,7 @@ export class UserService implements BaseService<any,  boolean>
         try
         {
             const command: UploadPhotoCommand = UploadPhotoCommand.fromDTO(dto);
-            // await this.UploadPhotoValidator.Validator(command);
+            await this.UploadPhotoValidator.Validator(command);
             const photoUploaded: UploadPhotoQueryDTO = await this.UploadPhotoHandler.Handle(command, request);
 
             const uploadPhotoViewModel: UploadPhotoViewModel = UploadPhotoViewModel.fromQueryDTO(photoUploaded);
