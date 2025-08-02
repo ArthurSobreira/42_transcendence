@@ -6,7 +6,7 @@ import {ErrorCatalog} from "../../../Shared/Errors/ErrorCatalog.js";
 import {UpdateStatsCommand} from "../CommandObject/UpdateStatsCommand.js";
 import {GameTypeEnum} from "../../../Application/Enums/GameTypeEnum.js";
 
-export class UpdateStatsCommandHandler implements BaseHandlerCommand<UpdateStatsCommand>
+export class UpdateStatsCommandHandler implements BaseHandlerCommand<UpdateStatsCommand, void>
 {
     private userRepository: UserRepository;
     private notificationError: NotificationError;

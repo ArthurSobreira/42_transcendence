@@ -7,6 +7,8 @@ import { EnableTwoFaDTO } from "src/Application/DTO/ToCommand/EnableTwoFaDTO.js"
 import { Result } from "src/Shared/Utils/Result.js";
 import {DisableTwoFaDTO} from "../../Application/DTO/ToCommand/DisableTwoFaDTO.js";
 import {Generate2FaViewModel} from "../../Application/ViewModels/Generate2FaViewModel.js";
+import {Verify2faDTO} from "../../Application/DTO/ToQuery/Verify2faDTO.js";
+import {LoginUserViewModel} from "../../Application/ViewModels/LoginUserViewModel.js";
 
 export class TwoFAController extends BaseController
 {
@@ -24,7 +26,7 @@ export class TwoFAController extends BaseController
     {
         const body = request.body;
         const twoFaDTO: EnableTwoFaDTO = new EnableTwoFaDTO(body.uuid, body.secret, body.code);
-        const result: Result<boolean> = await this.twoFaService.EnableTwoFa(twoFaDTO, reply);
+        const result: Result<boolean> = await this.twoFaService.EnableTwoFa(twoFaDTO);
         return this.handleResult(result, reply, this.notificationError);
     }
 
@@ -32,14 +34,22 @@ export class TwoFAController extends BaseController
     {
         const body = request.body;
         const twoFaDTO: DisableTwoFaDTO = new DisableTwoFaDTO(body.uuid, body.secret, body.code);
-        const result: Result<boolean> = await this.twoFaService.DisableTwoFa(twoFaDTO, reply);
+        const result: Result<boolean> = await this.twoFaService.DisableTwoFa(twoFaDTO);
         return this.handleResult(result, reply, this.notificationError);
     }
 
-    public async Generate2FaSetup(request: FastifyRequest<{ Body: { uuid: string } }>, reply: FastifyReply)
+    public async Generate2FaQrcode(request: FastifyRequest<{ Body: { uuid: string } }>, reply: FastifyReply)
     {
         const body = request.body;
-        const result: Result<Generate2FaViewModel | null> = await this.twoFaService.Generate2FaSetup(body.uuid, reply);
+        const result: Result<Generate2FaViewModel | null> = await this.twoFaService.Generate2FaQrcode(body.uuid);
+        return this.handleResult(result, reply, this.notificationError);
+    }
+
+    public async Verify2FA(request: FastifyRequest<{ Querystring: Verify2faDTO }>, reply: FastifyReply)
+    {
+        const query = request.query;
+        const verify2FaDTO: Verify2faDTO = new Verify2faDTO(query.uuid, query.code);
+        const result: Result<LoginUserViewModel> = await this.twoFaService.Verify2FaCode(verify2FaDTO);
         return this.handleResult(result, reply, this.notificationError);
     }
 }

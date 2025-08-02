@@ -21,19 +21,21 @@ enum StatusRequest {
 }
 
 model User {
-    id            Int       @id @default(autoincrement())
-    uuid          String    @unique
-    email         String    @unique
-    password      String
-    username      String    @unique
-    profilePic    String?
-    createdAt     DateTime  @default(now())
-    lastLogin     DateTime?
-    matchesPlayed Int       @default(0)
-    wins          Int       @default(0)
-    loses         Int       @default(0)
-    auth0Id       String?   @unique
-    isOnline      Boolean   @default(false)
+    id               Int       @id @default(autoincrement())
+    uuid             String    @unique
+    email            String    @unique
+    password         String
+    username         String    @unique
+    profilePic       String?
+    createdAt        DateTime  @default(now())
+    lastLogin        DateTime?
+    matchesPlayed    Int       @default(0)
+    wins             Int       @default(0)
+    loses            Int       @default(0)
+    auth0Id          String?   @unique
+    isOnline         Boolean   @default(false)
+    twoFactorEnabled Boolean   @default(false)
+    twoFactorSecret  String?
 
     sentRequests     Friendship[] @relation("SentRequests")
     receivedRequests Friendship[] @relation("ReceivedRequests")

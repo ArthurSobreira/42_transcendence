@@ -23,6 +23,7 @@ import {Verify2faDTO} from "../../DTO/ToQuery/Verify2faDTO.js";
 import {Verify2FaQueryValidator} from "../../../Domain/Queries/Validators/Verify2FaQueryValidator.js";
 import {Verify2faQuery} from "../../../Domain/Queries/QueryObject/Verify2faQuery.js";
 import {Verify2FaQueryHandler} from "../../../Domain/Queries/Handlers/Verify2FaQueryHandler.js";
+import {LoginUserViewModel} from "../../ViewModels/LoginUserViewModel.js";
 
 export class TwoFAService implements BaseService<any, boolean>
 {
@@ -52,7 +53,7 @@ export class TwoFAService implements BaseService<any, boolean>
         throw new Error("Method not implemented.");
     }
 
-    public async EnableTwoFa(dto: EnableTwoFaDTO, reply: FastifyReply): Promise<Result<boolean>>
+    public async EnableTwoFa(dto: EnableTwoFaDTO): Promise<Result<boolean>>
     {
         try
         {
@@ -75,7 +76,7 @@ export class TwoFAService implements BaseService<any, boolean>
         }
     }
 
-    public async DisableTwoFa(dto: DisableTwoFaDTO, reply: FastifyReply): Promise<Result<boolean>>
+    public async DisableTwoFa(dto: DisableTwoFaDTO): Promise<Result<boolean>>
     {
         try
         {
@@ -98,7 +99,7 @@ export class TwoFAService implements BaseService<any, boolean>
         }
     }
 
-    public async Generate2FaSetup(uuid: string, reply: FastifyReply): Promise<Result<Generate2FaViewModel | null>>
+    public async Generate2FaQrcode(uuid: string): Promise<Result<Generate2FaViewModel | null>>
     {
         try
         {
@@ -127,7 +128,7 @@ export class TwoFAService implements BaseService<any, boolean>
         }
     }
 
-    public async Verify2FaCode(dto: Verify2faDTO, request: FastifyRequest <{ Querystring: Verify2faQuery }>, reply: FastifyReply): Promise<Result<boolean>>
+    public async Verify2FaCode(dto: Verify2faDTO): Promise<Result<LoginUserViewModel>>
     {
         try
         {
@@ -137,9 +138,9 @@ export class TwoFAService implements BaseService<any, boolean>
             const result = await this.Verify2FaHandler.Handle(query);
 
             if (!result)
-                return Result.SuccessWithData<boolean>("Error: 2fa isn't unable for this user", false);
+                return Result.SuccessWithData<LoginUserViewModel>("Error: 2fa isn't unable for this user", result);
 
-            return Result.SuccessWithData<boolean>("2fa verified successfully", true);
+            return Result.SuccessWithData<LoginUserViewModel>("2fa verified successfully", result);
         }
         catch (error)
         {
