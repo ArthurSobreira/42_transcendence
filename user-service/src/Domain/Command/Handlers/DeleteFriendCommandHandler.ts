@@ -3,7 +3,7 @@ import {FriendshipRepository} from "../../../Infrastructure/Persistence/Reposito
 import {NotificationError} from "../../../Shared/Errors/NotificationError.js";
 import {DeleteFriendCommand} from "../CommandObject/DeleteFriendCommand.js";
 
-export class DeleteFriendCommandHandler implements BaseHandlerCommand<DeleteFriendCommand>
+export class DeleteFriendCommandHandler implements BaseHandlerCommand<DeleteFriendCommand, void>
 {
     constructor(private friendshipRepository: FriendshipRepository, notification: NotificationError){}
 

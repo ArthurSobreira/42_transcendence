@@ -4,7 +4,7 @@ import {NotificationError} from "../../../Shared/Errors/NotificationError.js";
 import {UserRepository} from "../../../Infrastructure/Persistence/Repositories/Concrete/UserRepository.js";
 
 
-export class DeleteUserCommandHandler implements BaseHandlerCommand<DeleteUserCommand>
+export class DeleteUserCommandHandler implements BaseHandlerCommand<DeleteUserCommand, void>
 {
     constructor(private UserRepository: UserRepository, Notifcation: NotificationError)
     {
