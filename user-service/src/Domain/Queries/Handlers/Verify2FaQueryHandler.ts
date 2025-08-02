@@ -16,16 +16,17 @@ export class Verify2FaQueryHandler implements BaseHandlerQuery<Verify2faQuery, L
     {
         const user = await this.UserRepository.GetUserEntityByUuid(query.uuid);
 
-        const token = request.server.jwt.sign({
-            email: user!.Email.getEmail(),
+        const token = reply.server.jwt.sign({
+            uuid: user?.Uuid,
+            username: user?.Username,
             isAuthenticated: true,
         }, { expiresIn: '1d' });
 
         reply.setCookie('token', token, {
-            httpOnly: true, // TODO: verificar se isso muda no ultimo merge
+            httpOnly: true,
             secure: true,
             sameSite: 'lax',
-            path: '/'
+            path: '/',
         });
 
         return new LoginUserViewModel(token, user!.Uuid, user?.Username, user!.ProfilePic);

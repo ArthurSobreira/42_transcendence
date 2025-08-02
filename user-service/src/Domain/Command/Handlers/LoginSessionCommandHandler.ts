@@ -35,19 +35,19 @@ export class LoginSessionCommandHandler implements BaseHandlerCommand<UserSessio
       if (user && user.TwoFactorEnabled)
           return new LoginUserViewModel(null, user.Uuid, user.Username, user.ProfilePic);
 
-      const token = request.server.jwt.sign({
-         email: body.email,
+      const token = reply.server.jwt.sign({
+         uuid: user?.Uuid,
+         username: user?.Username,
          isAuthenticated: true,
-      }, {expiresIn: '1d'});
+      }, { expiresIn: '1d' });
 
       reply.setCookie('token', token, {
          httpOnly: true,
-         secure: false, // Deixei como false porque a aplicação ainda está em HTTP, mas deve ser true em HTTPS
+         secure: true,
          sameSite: 'lax',
          path: '/',
       });
 
-      //TODO: update esse cara debaixo
-      return new LoginUserViewModel(token);
+      return new LoginUserViewModel(token, user?.Uuid, user?.Username, user?.ProfilePic);
    }
 }
