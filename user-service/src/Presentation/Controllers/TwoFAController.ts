@@ -33,7 +33,7 @@ export class TwoFAController extends BaseController
     public async DisableTwoFA(request: FastifyRequest<{ Body: DisableTwoFaDTO }>, reply: FastifyReply)
     {
         const body = request.body;
-        const twoFaDTO: DisableTwoFaDTO = new DisableTwoFaDTO(body.uuid, body.secret, body.code);
+        const twoFaDTO: DisableTwoFaDTO = new DisableTwoFaDTO(body.uuid, body.code);
         const result: Result<boolean> = await this.twoFaService.DisableTwoFa(twoFaDTO);
         return this.handleResult(result, reply, this.notificationError);
     }

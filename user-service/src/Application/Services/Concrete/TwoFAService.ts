@@ -24,13 +24,14 @@ import {Verify2FaQueryValidator} from "../../../Domain/Queries/Validators/Verify
 import {Verify2faQuery} from "../../../Domain/Queries/QueryObject/Verify2faQuery.js";
 import {Verify2FaQueryHandler} from "../../../Domain/Queries/Handlers/Verify2FaQueryHandler.js";
 import {LoginUserViewModel} from "../../ViewModels/LoginUserViewModel.js";
+import {DisableTwoFaCommandValidator} from "../../../Domain/Command/Validators/DisableTwoFaCommandValidator.js";
 
 export class TwoFAService implements BaseService<any, boolean>
 {
     private EnableTwoFaHandler: EnableTwoFaCommandHandler;
     private EnableTwoFaValidator: EnableTwoFaCommandValidator
     private DisableTwoFaHandler: DisableTwoFaCommandHandler;
-    private DisableTwoFaValidator: EnableTwoFaCommandValidator;
+    private DisableTwoFaValidator: DisableTwoFaCommandValidator;
     private Generate2FaHandler: Generate2FaQueryHandler;
     private Generate2FaValidator: Generate2FaQueryValidator
     private Verify2FaHandler: Verify2FaQueryHandler;
@@ -42,7 +43,7 @@ export class TwoFAService implements BaseService<any, boolean>
         this.EnableTwoFaHandler = new EnableTwoFaCommandHandler(userRepository, notificationError);
         this.EnableTwoFaValidator = new EnableTwoFaCommandValidator(userRepository, notificationError);
         this.DisableTwoFaHandler = new DisableTwoFaCommandHandler(userRepository, notificationError);
-        this.DisableTwoFaValidator = new EnableTwoFaCommandValidator(userRepository, notificationError);
+        this.DisableTwoFaValidator = new DisableTwoFaCommandValidator(userRepository, notificationError);
         this.Generate2FaHandler = new Generate2FaQueryHandler(userRepository, notificationError);
         this.Generate2FaValidator = new Generate2FaQueryValidator(userRepository, notificationError);
         this.Verify2FaValidator = new Verify2FaQueryValidator(userRepository, notificationError);
