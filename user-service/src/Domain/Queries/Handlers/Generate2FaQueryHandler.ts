@@ -6,6 +6,8 @@ import {UserRepository} from "../../../Infrastructure/Persistence/Repositories/C
 import {Generate2FaQueryDTO} from "../../QueryDTO/Generate2FaQueryDTO.js";
 import {Generate2FaQuery} from "../QueryObject/Generate2FaQuery.js";
 
+//TODO: ref: https://blog.logto.io/support-authenticator-app-verification-for-your-nodejs-app
+
 export class Generate2FaQueryHandler implements BaseHandlerQuery<Generate2FaQuery, Generate2FaQueryDTO | null>
 {
     constructor(private UserRepository: UserRepository, notificationError: NotificationError)
@@ -19,7 +21,6 @@ export class Generate2FaQueryHandler implements BaseHandlerQuery<Generate2FaQuer
         if (!user)
             return null;
 
-        //TODO: ref: https://blog.logto.io/support-authenticator-app-verification-for-your-nodejs-app
         const secret = authenticator.generateSecret();
         const url = authenticator.keyuri(user!.Email.getEmail(), '42_transcendence', secret);
         const qrcodeCreated = await qrcode.toDataURL(url);

@@ -6,7 +6,7 @@ import {PasswordHashVO} from "../../ValueObjects/PasswordHashVO.js";
 import {EmailVO} from "../../ValueObjects/EmailVO.js";
 import {User} from "../../Entities/Concrete/User.js";
 
-export class EditUserCommandHandler implements BaseHandlerCommand<EditUserCommand>
+export class EditUserCommandHandler implements BaseHandlerCommand<EditUserCommand, void>
 {
     constructor(private UserRepository: UserRepository, Notifcation: NotificationError)
     {
