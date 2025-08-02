@@ -61,9 +61,13 @@ function displayAuthError(backendMessage?: string) {
   const errorElement = document.getElementById('auth-error');
   if (errorElement) {
     if (backendMessage) {
-      const cleanMessage = backendMessage.split('Message:')[1]?.trim() || backendMessage;
+      const firstError = backendMessage.split('\n')[0];
+
+      const cleanMessage = firstError.split('Message:')[1]?.trim() || firstError;
+      
       const errorTranslations = t().errors;
       const displayMessage = errorTranslations[cleanMessage as ErrorKeys] || errorTranslations["Default Error"];
+      
       errorElement.textContent = displayMessage;
       errorElement.style.display = 'block';
     } else {
@@ -109,6 +113,7 @@ async function handleRegister(event: Event) {
     const username = (document.getElementById('register-username') as HTMLInputElement).value;
     const email = (document.getElementById('register-email') as HTMLInputElement).value;
     const password = (document.getElementById('register-password') as HTMLInputElement).value;
+    const anonymous = (document.getElementById('share-email-checkbox') as HTMLInputElement).checked;
 
     try {
         const res = await fetch(`${API_BASE_URL}/user`, {
@@ -118,7 +123,7 @@ async function handleRegister(event: Event) {
                 username, 
                 email, 
                 password,
-                anonymous: false,
+                anonymous: anonymous,
                 profilePic: null,
                 lastLogin: null
             }),
@@ -126,8 +131,10 @@ async function handleRegister(event: Event) {
         console.log("Resposta do servidor:", res);
         const data = await res.json();
         if (res.ok) {
+          console.log("Dados recebidos:", data);
             await handleAuthSuccess(data);
         } else {
+            console.log("Erro na resposta do servidor:", data);
             displayAuthError(data.message || 'Falha no cadastro.');
         }
     } catch (err) {

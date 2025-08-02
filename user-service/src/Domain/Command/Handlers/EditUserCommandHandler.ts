@@ -30,11 +30,16 @@ export class EditUserCommandHandler implements BaseHandlerCommand<EditUserComman
         else
             emailVO = EmailVO.AddEmail(command.Email);
 
-        const passwordHashVO = await PasswordHashVO.Create(command.Password);
+        //user?.ChangeEmail(emailVO);
+        user?.ChangePhoto(command.ProfilePic);
+        
+        if (command.Username) {
+            user?.ChangeUsername(command.Username);
+        }
+        if (command.Password) {
+            const passwordHashVO = await PasswordHashVO.Create(command.Password);
+            user?.ChangePassword(passwordHashVO);
+        }
 
-       user?.ChangeEmail(emailVO);
-       user?.ChangePassword(passwordHashVO);
-       user?.ChangeUsername(command.Username);
-       user?.ChangePhoto(command.ProfilePic);
     }
 }

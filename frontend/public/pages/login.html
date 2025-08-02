@@ -23,14 +23,18 @@
     </div>
 
     <div id="register-view" class="hidden">
-      <h2 class="text-3xl mb-6 text-glow">Cadastro</h2>
-      <form id="register-account-form">
-        <input type="text" id="register-username" placeholder="Nome de usuário" class="input-field mb-4" required>
-        <input type="email" id="register-email" placeholder="Email" class="input-field mb-4" required>
-        <input type="password" id="register-password" placeholder="Senha" class="input-field mb-6" required>
-        <button type="submit" class="menu-button w-full">Criar Conta</button>
-      </form>
-      <button id="back-to-initial-from-register" class="back-button">Voltar</button>
+        <h2 class="text-3xl mb-6 text-glow">Cadastro</h2>
+        <form id="register-account-form">
+            <input type="text" id="register-username" placeholder="Nome de usuário" class="input-field mb-4" required>
+            <input type="email" id="register-email" placeholder="Email" class="input-field mb-4" required>
+            <input type="password" id="register-password" placeholder="Senha" class="input-field mb-6" required>
+            <div class="flex items-center justify-center mb-4">
+                <input type="checkbox" id="share-email-checkbox" name="share-email" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="share-email-checkbox" class="ml-2 text-sm font-medium text-gray-300">Gostaria de compartilhar seu e-mail?</label>
+            </div>
+            <button type="submit" class="menu-button w-full">Criar Conta</button>
+        </form>
+        <button id="back-to-initial-from-register" class="back-button">Voltar</button>
     </div>
 
     <p id="auth-error" class="text-red-500 mt-4 h-6 text-center"></p>
