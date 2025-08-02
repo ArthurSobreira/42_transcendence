@@ -9,7 +9,7 @@ export class ErrorCatalog
     public static readonly UsernameAlreadyExists: CustomError = new CustomError(400, "Username already exists");
     public static readonly EmailAlreadyExists: CustomError = new CustomError(400, "Email already exists");
     public static readonly NegativePoints: CustomError = new CustomError(400, "Points can't be negative");
-    public static readonly InvalidExtension: CustomError = new CustomError(400, "Invalid file extension. Only .jpg and .png are allowed");
+    public static readonly InvalidExtension: CustomError = new CustomError(400, "Invalid file extension. Only .jpeg/.jpg and .png are allowed");
     public static readonly RequestToSamePerson: CustomError = new CustomError(400, "Invalid request freind. Sender and receiver uuid are the same");
     public static readonly InvalidStatusFriendRequest: CustomError = new CustomError(400, "Invalid friend request status for the operation");
     public static readonly FriendshipAlreadyExists: CustomError = new CustomError(400, "This friendship already exists");

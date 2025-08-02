@@ -56,6 +56,12 @@ server.register(helmet, {
   }
 });
 
+server.register(import('@fastify/multipart'), {
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB
+  }
+});
+
 server.register(cookie);
 server.register(fastifyCors, {
   origin: ['http://localhost:5173', 'http://127.0.0.1:8080', 'http://localhost:8080'],
