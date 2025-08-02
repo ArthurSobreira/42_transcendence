@@ -26,4 +26,25 @@
     display: none;
   }
 
+  .input-field {
+    @apply w-full bg-slate-700 text-white p-3 rounded-md border-2 border-gray-600 focus:border-indigo-500 focus:outline-none transition-colors;
+  }
+
+  .separator {
+    @apply my-4 text-gray-400 text-sm flex items-center w-4/5;
+  }
+  .separator::before,
+  .separator::after {
+    @apply content-[''] flex-grow border-b border-gray-600;
+  }
+  .separator::before {
+    @apply mr-4;
+  }
+  .separator::after {
+    @apply ml-4;
+  }
+
+  .back-button {
+    @apply mt-6 text-indigo-400 hover:text-white transition-colors duration-200 cursor-pointer;
+  }
 }

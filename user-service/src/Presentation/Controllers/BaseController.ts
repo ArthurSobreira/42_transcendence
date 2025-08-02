@@ -18,7 +18,7 @@ export abstract class BaseController
             return reply.status(200).send(result.getMessage());
         }
         else
-            return reply.status(this.getStatusCodeFromErrorType(result.Error)).send(result.getMessage())
+            return reply.status(this.getStatusCodeFromErrorType(result.Error)).send({ message: result.getMessage() })
     }
 
     private getStatusCodeFromErrorType(ErrorType?: ErrorTypeEnum): number

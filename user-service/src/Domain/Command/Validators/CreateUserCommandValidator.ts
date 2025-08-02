@@ -21,6 +21,7 @@ export class CreateUserCommandValidator implements BaseValidator<CreateUserComma
 
     public async Validator(command: CreateUserCommand): Promise<void>
     {
+        this.NotificationError.CleanErrors();
         if (!EmailVO.ValidEmail(command.Email)) {
             this.NotificationError.AddError(ErrorCatalog.InvalidEmail);
         }
@@ -39,7 +40,7 @@ export class CreateUserCommandValidator implements BaseValidator<CreateUserComma
 
         if (!this.CheckExtension(command.ProfilePic) && command.ProfilePic != null)
             this.NotificationError.AddError(ErrorCatalog.InvalidExtension);
-
+        
         if (this.NotificationError.NumberOfErrors() > 0){
             const allErrors : CustomError[] = this.NotificationError.GetAllErrors();
             throw new ValidationException(allErrors);

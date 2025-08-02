@@ -26,13 +26,15 @@ export class CreateUserService implements BaseService<CreateUserDTO> {
 
     public async Create(dto: CreateUserDTO, request: FastifyRequest <{ Body: CreateUserDTO }>, reply: FastifyReply): Promise<Result<LoginUserViewModel>>
     {
+        console.log("Creating user with DTO:", dto);
         try
         {
             const command: CreateUserCommand = CreateUserCommand.FromDTO(dto);
             await this.CreateUserValidator.Validator(command);
             await this.CreateUserHandler.Handle(command);
-            const loginUserViewModel = this.GenerateToken(reply, request);
-
+            const newUser = await this.UserRepository.GetUserEntityByEmail(command.Email);
+            const loginUserViewModel = this.GenerateToken(reply, newUser);
+            
             return Result.SuccessWithData<LoginUserViewModel>("User created and logged successfully", loginUserViewModel);
         } catch (error)
         {
@@ -62,23 +64,22 @@ export class CreateUserService implements BaseService<CreateUserDTO> {
         }
     }
 
-    private GenerateToken(reply: FastifyReply, request: FastifyRequest<{ Body: CreateUserDTO }>)
+    private GenerateToken(reply: FastifyReply, user: any)
     {
-        const body = request.body;
-
-        const token = request.server.jwt.sign({
-            username: body.username,
+        const token = reply.server.jwt.sign({
+            uuid: user.Uuid,
+            username: user.Username,
             isAuthenticated: true,
         }, { expiresIn: '1h' });
 
         reply.setCookie('token', token, {
             httpOnly: true,
-            secure: false, // Deixei como false porque a aplicação ainda está em HTTP, mas deve ser true em HTTPS
+            secure: true,
             sameSite: 'lax',
             path: '/',
         });
 
-        return new LoginUserViewModel(token, null, body.username, body.profilePic);
+        return new LoginUserViewModel(token, user.Uuid, user.Username, user.ProfilePic);
     }
 
     public async Execute(dto: CreateUserDTO, reply: FastifyReply): Promise<Result>

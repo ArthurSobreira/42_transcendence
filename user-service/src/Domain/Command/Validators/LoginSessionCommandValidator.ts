@@ -16,6 +16,8 @@ export class LoginSessionCommandValidator implements BaseValidator<UserSessionCo
 
     public async Validator(command: UserSessionCommand): Promise<void>
     {
+        this.NotificationError.CleanErrors();
+
         if (!EmailVO.ValidEmail(command.Email))
             this.NotificationError.AddError(ErrorCatalog.InvalidEmail);
 
@@ -23,12 +25,18 @@ export class LoginSessionCommandValidator implements BaseValidator<UserSessionCo
             this.NotificationError.AddError(ErrorCatalog.InvalidPassword);
 
         const user = await this.UserRepository.GetUserEntityByEmail(command.Email);
-        if (!user)
+        if (!user) {
             this.NotificationError.AddError(ErrorCatalog.UserNotFound);
+        } else {
+            const isPasswordValid = await PasswordHashVO.Validate(
+                command.Password,
+                user.PasswordHash.getPasswordHash()
+            );
 
-        const passwordHashLogin: PasswordHashVO = await PasswordHashVO.Create(command.Password);
-        if (passwordHashLogin != user?.PasswordHash)
-            this.NotificationError.AddError(ErrorCatalog.WrongPassword);
+            if (!isPasswordValid) {
+                this.NotificationError.AddError(ErrorCatalog.WrongPassword);
+            }
+        }
 
         if (this.NotificationError.NumberOfErrors() > 0) {
             const allErrors: CustomError[] = this.NotificationError.GetAllErrors();

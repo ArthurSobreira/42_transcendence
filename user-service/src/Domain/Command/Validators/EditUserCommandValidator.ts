@@ -16,23 +16,24 @@ export class EditUserCommandValidator implements BaseValidator<EditUserCommand>
 
     public async Validator(command: EditUserCommand): Promise<void>
     {
-        if (!EmailVO.ValidEmail(command.Email)) {
-            this.NotificationError.AddError(ErrorCatalog.InvalidEmail);
-        }
-
-        if (!PasswordHashVO.ValidPassword(command.Password)) {
+        this.NotificationError.CleanErrors();
+        //if (!EmailVO.ValidEmail(command.Email)) {
+          //  this.NotificationError.AddError(ErrorCatalog.InvalidEmail);
+        //}
+        if (command.Password && !PasswordHashVO.ValidPassword(command.Password)) {
             this.NotificationError.AddError(ErrorCatalog.InvalidPassword);
         }
-
         if (!await this.UserRepository.VerifyIfUserExistsByUUID(command.Uuid))
             this.NotificationError.AddError(ErrorCatalog.UserNotFound);
 
-        if (await this.UserRepository.VerifyIfUserExistsByEmail(command.Email)) {
-            this.NotificationError.AddError(ErrorCatalog.EmailAlreadyExists);
+        if( await this.UserRepository.VerifyIfUserExistsByUsername(command.Username)) {
+            this.NotificationError.AddError(ErrorCatalog.UsernameAlreadyExists);
         }
-
-        if (!this.CheckExtension(command.ProfilePic) && command.ProfilePic != null)
-            this.NotificationError.AddError(ErrorCatalog.InvalidEmail);
+        // if (await this.UserRepository.VerifyIfUserExistsByEmail(command.Email)) {
+        //     this.NotificationError.AddError(ErrorCatalog.EmailAlreadyExists);
+        // }
+        if (command.ProfilePic != null && !this.CheckExtension(command.ProfilePic))
+            this.NotificationError.AddError(ErrorCatalog.InvalidExtension);
 
         if (this.NotificationError.NumberOfErrors() > 0){
             const allErrors : CustomError[] = this.NotificationError.GetAllErrors();
@@ -40,8 +41,15 @@ export class EditUserCommandValidator implements BaseValidator<EditUserCommand>
         }
     }
 
-    private CheckExtension(url: string | null): boolean | undefined
-    {
-        return url?.toLowerCase().endsWith('.jpg') || url?.toLowerCase().endsWith('.png');
+    private CheckExtension(url: string | null): boolean | undefined {
+        if (!url) return undefined;
+
+        const lowerUrl = url.toLowerCase();
+
+        const isImageExtension = lowerUrl.endsWith('.jpg') || lowerUrl.endsWith('.jpeg') || lowerUrl.endsWith('.png') || lowerUrl.endsWith('.webp');
+        const isGoogleProfilePic = lowerUrl.includes('lh3.googleusercontent.com/');
+
+        return isImageExtension || isGoogleProfilePic;
     }
+
 }
