@@ -22,12 +22,14 @@ export class Verify2FaQueryValidator implements BaseValidator<Verify2faQuery>
     {
         const user = await this.UserRepository.GetUserEntityByUuid(query.uuid);
 
-        if (!user || !user.TwoFactorEnabled)
+        if (!user || !user.TwoFactorEnabled || !user.twoFactorSecret)
             this.NotificationError.AddError(ErrorCatalog.InvalidToken2Fa);
-
-        const isValid = authenticator.verify({ token: query.code, secret: user.T });
-        if (!isValid)
-            this.NotificationError.AddError(ErrorCatalog.InvalidToken2Fa);
+        else
+        {
+            const isValid = authenticator.verify({ token: query.code, secret: user?.twoFactorSecret });
+            if (!isValid)
+                this.NotificationError.AddError(ErrorCatalog.InvalidToken2Fa);
+        }
 
         if (this.NotificationError.NumberOfErrors() > 0){
             const allErrors : CustomError[] = this.NotificationError.GetAllErrors();

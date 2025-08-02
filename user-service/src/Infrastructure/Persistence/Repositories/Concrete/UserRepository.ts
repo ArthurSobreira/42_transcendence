@@ -340,7 +340,9 @@ export class UserRepository implements IBaseRepository<GetUserQueryDTO, User> {
             userEntity.wins,
             userEntity.loses,
             userEntity.isOnline,
-            userEntity.LastLogin
+            userEntity.LastLogin,
+            userEntity.twoFactorEnabled,
+            userEntity.twoFactorSecret,
         );
     }
 }

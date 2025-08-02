@@ -24,7 +24,7 @@ export class Verify2FaQueryHandler implements BaseHandlerQuery<Verify2faQuery, L
         const token = this.request.server.jwt.sign({
             email: user!.Email.getEmail(),
             isAuthenticated: true,
-        }, { expiresIn: '1h' });
+        }, { expiresIn: '1d' });
 
         this.reply.setCookie('token', token, {
             httpOnly: true, // TODO: verificar se isso muda no ultimo merge
