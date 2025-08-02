@@ -33,14 +33,16 @@ export class LoginUserService  implements BaseService<UserSessionDTO, LoginUserV
         throw new Error("Method not implemented.");
     }
 
-    public async Login(dto: UserSessionDTO, request: FastifyRequest <{ Body: UserSessionDTO}>, reply: FastifyReply) : Promise<Result<LoginUserViewModel>>
+    public async Login(dto: UserSessionDTO, request: FastifyRequest<{ Body: UserSessionDTO}>, reply: FastifyReply): Promise<Result<LoginUserViewModel>>
     {
         try
         {
             const command: UserSessionCommand = UserSessionCommand.FromDTO(dto);
             await this.LoginUserValidator.Validator(command);
-            await this.LoginUserHandler.Handle(command);
-            const loginUserViewModel = this.GenerateToken(reply, request);
+            const loginUserViewModel = await this.LoginUserHandler.Handle(command, request, reply);
+
+            if (loginUserViewModel.token == null)
+                return Result.SuccessWithData<LoginUserViewModel>("2FA verification required", loginUserViewModel);
 
             return Result.SuccessWithData<LoginUserViewModel>("User logged in successfully", loginUserViewModel);
         }
@@ -60,24 +62,5 @@ export class LoginUserService  implements BaseService<UserSessionDTO, LoginUserV
             }
             return Result.Failure(ErrorCatalog.InternalServerError.SetError(), ErrorTypeEnum.INTERNAL);
         }
-    }
-
-    private GenerateToken(reply: FastifyReply, request: FastifyRequest<{ Body: UserSessionDTO }>)
-    {
-        const body = request.body;
-
-        const token = request.server.jwt.sign({
-            email: body.email,
-            isAuthenticated: true,
-        }, { expiresIn: '1d' });
-
-        reply.setCookie('token', token, {
-            httpOnly: true,
-            secure: false, // Deixei como false porque a aplicação ainda está em HTTP, mas deve ser true em HTTPS
-            sameSite: 'lax',
-            path: '/',
-        });
-
-        return new LoginUserViewModel(token);
     }
 }

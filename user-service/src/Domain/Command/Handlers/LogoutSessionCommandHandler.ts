@@ -2,7 +2,7 @@ import {BaseHandlerCommand} from "./BaseHandlerCommand.js";
 import {UserSessionCommand} from "../CommandObject/UserSessionCommand.js";
 import {UserRepository} from "../../../Infrastructure/Persistence/Repositories/Concrete/UserRepository.js";
 
-export class LogoutSessionCommandHandler implements BaseHandlerCommand<UserSessionCommand>
+export class LogoutSessionCommandHandler implements BaseHandlerCommand<UserSessionCommand, void>
 {
     constructor(private UserRepository: UserRepository)
     {

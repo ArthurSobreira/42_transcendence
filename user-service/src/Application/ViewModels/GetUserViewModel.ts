@@ -17,7 +17,7 @@ export class GetUserViewModel
 
     constructor(uuid?: string, username?: string, email?: string, profilepic: string | null = null,
                 matchesPlayed? : number | null, wins? : number | null, loses? : number | null, isOnline?: boolean | null, lastLogin?: Date | null,
-                twoFactorEnabled: boolean | null, twoFactorSecret: string | null = null)
+                twoFactorEnabled?: boolean | null, twoFactorSecret: string | null = null)
     {
         this.Uuid = uuid ?? null;
         this.Username = username ?? null;
@@ -28,7 +28,7 @@ export class GetUserViewModel
         this.loses = loses ?? null;
         this.isOnline = isOnline ?? null;
         this.lastLogin = lastLogin === undefined ? null : lastLogin;
-        this.twoFactorEnabled = twoFactorEnabled;
+        this.twoFactorEnabled = twoFactorEnabled ?? null;
         this.twoFactorSecret = twoFactorSecret;
     }
 
