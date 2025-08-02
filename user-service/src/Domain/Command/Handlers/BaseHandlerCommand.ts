@@ -1,6 +1,7 @@
 import {NotificationError} from "../../../Shared/Errors/NotificationError.js";
+import {FastifyReply, FastifyRequest} from "fastify";
 
-export interface BaseHandlerCommand<T>
+export interface BaseHandlerCommand<TCommand, TResult = TCommand>
 {
-    Handle(command: T, notificationError: NotificationError): Promise<void>;
+    Handle(command: TCommand, request?: FastifyRequest, reply?: FastifyReply, notificationError?: NotificationError): Promise<TResult>;
 }

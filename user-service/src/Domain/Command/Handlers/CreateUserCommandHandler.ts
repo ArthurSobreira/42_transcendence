@@ -6,7 +6,7 @@ import {UserRepository} from "../../../Infrastructure/Persistence/Repositories/C
 import {User} from "../../Entities/Concrete/User.js";
 import {NotificationError} from "../../../Shared/Errors/NotificationError.js";
 
-export class CreateUserCommandHandler implements BaseHandlerCommand<CreateUserCommand>
+export class CreateUserCommandHandler implements BaseHandlerCommand<CreateUserCommand, void>
 {
     private UserRepository: UserRepository;
 

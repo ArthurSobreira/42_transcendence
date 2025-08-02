@@ -5,7 +5,7 @@ import {Friendship} from "../../Entities/Concrete/Friendship.js";
 import {FriendshipRepository} from "../../../Infrastructure/Persistence/Repositories/Concrete/FriendshipRepository.js";
 import {NotificationError} from "../../../Shared/Errors/NotificationError.js";
 
-export class AddRequestFriendCommandHandler implements BaseHandlerCommand<AddRequestFriendCommand>
+export class AddRequestFriendCommandHandler implements BaseHandlerCommand<AddRequestFriendCommand, void>
 {
     private FriendshipRepository: FriendshipRepository;
 
