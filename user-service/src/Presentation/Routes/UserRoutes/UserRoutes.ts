@@ -16,6 +16,7 @@ const opts = {
                 email: { type: 'string' },
                 password: { type: 'string' },
                 username: { type: 'string' },
+                anonymous: { type: 'boolean', default: false },
                 profilePic: { type: ['string', 'null'] },
                 lastLogin: {
                     anyOf: [

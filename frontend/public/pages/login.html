@@ -1,8 +1,43 @@
 <div class="w-full h-screen flex items-center justify-center">
-  <div class="text-center p-10 bg-slate-800 rounded-xl shadow-retro">
-    <h1 class="text-6xl mb-16 text-glow">Bem-vindo ao Transcendence!</h1>
-    <p class="text-lg mb-12">Faça login com sua conta do Google para continuar.</p>
+  <div class="text-center p-10 bg-slate-800 rounded-xl shadow-retro w-full max-w-md">
 
-    <div id="g_id_signin" class="flex justify-center"></div>
+    <div id="initial-view">
+      <h1 class="text-4xl mb-8 text-glow">Bem-vindo!</h1>
+      <p class="text-lg mb-10">Escolha uma opção para continuar.</p>
+      <div class="flex flex-col items-center">
+        <button id="show-login-view" class="menu-button w-full">Entrar</button>
+        <button id="show-register-view" class="menu-button w-full">Cadastrar</button>
+        <div class="separator">ou</div>
+        <div id="g_id_signin" class="flex justify-center mt-2"></div>
+      </div>
+    </div>
+
+    <div id="login-view" class="hidden">
+      <h2 class="text-3xl mb-6 text-glow">Login</h2>
+      <form id="email-login-form">
+        <input type="email" id="login-email" placeholder="Email" class="input-field mb-4" required>
+        <input type="password" id="login-password" placeholder="Senha" class="input-field mb-6" required>
+        <button type="submit" class="menu-button w-full">Entrar</button>
+      </form>
+      <button id="back-to-initial-from-login" class="back-button">Voltar</button>
+    </div>
+
+    <div id="register-view" class="hidden">
+        <h2 class="text-3xl mb-6 text-glow">Cadastro</h2>
+        <form id="register-account-form">
+            <input type="text" id="register-username" placeholder="Nome de usuário" class="input-field mb-4" required>
+            <input type="email" id="register-email" placeholder="Email" class="input-field mb-4" required>
+            <input type="password" id="register-password" placeholder="Senha" class="input-field mb-6" required>
+            <div class="flex items-center justify-center mb-4">
+                <input type="checkbox" id="share-email-checkbox" name="share-email" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="share-email-checkbox" class="ml-2 text-sm font-medium text-gray-300">Gostaria de compartilhar seu e-mail?</label>
+            </div>
+            <button type="submit" class="menu-button w-full">Criar Conta</button>
+        </form>
+        <button id="back-to-initial-from-register" class="back-button">Voltar</button>
+    </div>
+
+    <p id="auth-error" class="text-red-500 mt-4 h-6 text-center"></p>
+
   </div>
 </div>

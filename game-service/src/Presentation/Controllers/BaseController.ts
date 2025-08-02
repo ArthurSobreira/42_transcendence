@@ -17,8 +17,10 @@ export abstract class BaseController
             }
             return reply.status(200).send(result.getMessage());
         }
-        else
-            return reply.status(this.getStatusCodeFromErrorType(result.Error)).send(result.getMessage())
+        else{
+            console.log("Erro ao processar resultado:", result.Error);
+            return reply.status(this.getStatusCodeFromErrorType(result.Error)).send({ message: result.getMessage() });
+        }
     }
 
     private getStatusCodeFromErrorType(ErrorType?: ErrorTypeEnum): number

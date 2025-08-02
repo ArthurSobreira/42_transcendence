@@ -248,7 +248,6 @@ export class UserRepository implements IBaseRepository<GetUserQueryDTO, User> {
                 ]
             }
         });
-
         return count > 0;
     }
 
@@ -265,7 +264,6 @@ export class UserRepository implements IBaseRepository<GetUserQueryDTO, User> {
 
     public async VerifyIfUserExistsByUsername(username: string): Promise<boolean> {
         const user = await this.prisma.user.findUnique({where: {username}});
-
         return user !== null;
     }
 
@@ -277,7 +275,6 @@ export class UserRepository implements IBaseRepository<GetUserQueryDTO, User> {
 
         const users = await this.prisma.user.findMany({where: {username: {in: validUsernames}}});
 
-        console.log(`existem: ${users.length}`);
         return users.length === validUsernames.length;
     }
 
