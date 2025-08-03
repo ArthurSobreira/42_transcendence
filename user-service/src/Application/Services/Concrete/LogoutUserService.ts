@@ -10,7 +10,7 @@ import {PrismaClientKnownRequestError} from "@prisma/client/runtime/library";
 import {ErrorCatalog} from "../../../Shared/Errors/ErrorCatalog.js";
 import { Result } from "../../../Shared/Utils/Result.js";
 import {FastifyRequest} from "fastify";
-import {TokenBlacklistService} from "./TokenBlacklistService.js";
+import {TokenBlacklistService} from "./Redis/TokenBlacklistService.js";
 import {ErrorTypeEnum} from "../../Enums/ErrorTypeEnum.js";
 
 export class LogoutUserService implements BaseService<UserSessionDTO>

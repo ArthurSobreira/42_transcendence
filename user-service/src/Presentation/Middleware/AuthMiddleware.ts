@@ -1,4 +1,4 @@
-import {TokenBlacklistService} from "../../Application/Services/Concrete/TokenBlacklistService.js";
+import {TokenBlacklistService} from "../../Application/Services/Concrete/Redis/TokenBlacklistService.js";
 import {JWTPayload} from "./JWTPayload.js";
 
 // declare module 'fastify'{
@@ -8,9 +8,10 @@ import {JWTPayload} from "./JWTPayload.js";
 // }
 
 export const authenticateJWT = async (request: any, reply: any): Promise<void> => {
-    try {
+    try
+    {
         let token = request.cookies.token;
-        
+
         if (!token) {
             const authHeader = request.headers.authorization;
             if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -32,7 +33,21 @@ export const authenticateJWT = async (request: any, reply: any): Promise<void> =
         }
 
         request.user = request.server.jwt.verify(token);
-    } catch (err) {
+    }
+    catch (err: any)
+    {
+        if (err.name === 'TokenExpiredError')
+        {
+            const refreshToken = request.cookies.refreshToken;
+            if (refreshToken)
+            {
+                return reply.code(401).send({
+                    message: 'Access token expired',
+                    code: 'TOKEN_EXPIRED',
+                    hasRefreshToken: true,
+                })
+            }
+        }
         console.error('JWT verification error:', err);
         reply.status(401).send({ message: 'Invalid token - AuthenticateJWT' });
     }

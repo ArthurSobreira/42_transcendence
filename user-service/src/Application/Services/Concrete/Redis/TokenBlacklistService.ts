@@ -1,28 +1,13 @@
 import redis from "redis";
+import {BaseRedisService} from "./BaseRedisService.js";
 
-export class TokenBlacklistService {
-    private static redisClient = redis.createClient();
+export class TokenBlacklistService extends BaseRedisService
+{
     private static readonly BLACKLIST_PREFIX = "blacklisted_token:";
-    private static isConnected = false;
     private static inMemoryBlacklist: Map<string, number> = new Map();
 
-    static async initialize() {
-        try {
-            await this.redisClient.connect();
-            this.isConnected = true;
-        } catch (error) {
-            this.isConnected = false;
-        }
-    }
-
-    static disconnect() {
-        if (this.isConnected) {
-            this.redisClient.destroy();
-        }
-        this.inMemoryBlacklist.clear();
-    }
-
-    static async blacklistToken(token: string, expirationInSeconds?: number): Promise<void> {
+    static async blacklistToken(token: string, expirationInSeconds?: number): Promise<void>
+    {
         if (this.isConnected) {
             try {
                 const key = this.BLACKLIST_PREFIX + token;
