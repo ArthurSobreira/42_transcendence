@@ -29,6 +29,8 @@ import {FriendshipRoutes} from "./Presentation/Routes/FriendshipRoutes/Friendshi
 import {TwoFARoutes} from "./Presentation/Routes/TwoFARoutes/TwoFARoutes.js";
 import {TwoFAController} from "./Presentation/Controllers/TwoFAController.js";
 import {TwoFAService} from "./Application/Services/Concrete/TwoFAService.js";
+import {BaseRedisService} from "./Application/Services/Concrete/Redis/BaseRedisService.js";
+import * as process from "node:process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -158,11 +160,24 @@ async function main() {
   await createDefaultUser(prisma, userRepository, createUserService);
   await FriendshipRoutes(server, friendshipController);
   await TwoFARoutes(server, twoFAController);
+  await BaseRedisService.Initialize();
 
   server.setErrorHandler(async (error, request, reply) => {
     console.error("Internal server error:", error);
     reply.status(500).send({ message: "Ocorreu um erro interno." });
   });
+
+  process.on('SIGTERM', async () => {
+    await BaseRedisService.Disconnect();
+    await prisma.$disconnect();
+    process.exit(0);
+  })
+
+  process.on('SIGINT', async () => {
+    await BaseRedisService.Disconnect();
+    await prisma.$disconnect();
+    process.exit(0);
+  })
 
   try {
     const address = await server.listen({ port: 8080, host: '0.0.0.0' });
