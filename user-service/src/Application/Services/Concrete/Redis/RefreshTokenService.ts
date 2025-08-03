@@ -1,4 +1,6 @@
 import {BaseRedisService} from "./BaseRedisService.js";
+import {require} from "tsx/cjs/api";
+import * as crypto from "node:crypto"; //TODO: dá pra limitar apenas em crypto?
 
 export class RefreshTokenService extends BaseRedisService
 {
@@ -77,5 +79,10 @@ export class RefreshTokenService extends BaseRedisService
                 console.error("Error revoking refresh token: ", error);
             }
         }
+    }
+
+    static generateRefreshToken()
+    {
+        return crypto.randomBytes(32).toString('hex');
     }
 }

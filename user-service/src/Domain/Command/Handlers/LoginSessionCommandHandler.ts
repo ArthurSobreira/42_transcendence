@@ -7,6 +7,7 @@ import {LoginUserViewModel} from "../../../Application/ViewModels/LoginUserViewM
 import {FastifyReply, FastifyRequest} from "fastify";
 import {UserSessionDTO} from "../../../Application/DTO/ToCommand/UserSessionDTO.js";
 import {User} from "../../Entities/Concrete/User.js";
+import {RefreshTokenService} from "../../../Application/Services/Concrete/Redis/RefreshTokenService.js";
 
 export class LoginSessionCommandHandler implements BaseHandlerCommand<UserSessionCommand, LoginUserViewModel>
 {
@@ -25,15 +26,18 @@ export class LoginSessionCommandHandler implements BaseHandlerCommand<UserSessio
 
       await this.UserRepository.Update(user!.Uuid, user);
 
-      return this.GenerateToken(user, reply, request);
+      return await this.GenerateToken(user, reply, request);
    }
 
-   private GenerateToken(user: User | null, reply: FastifyReply, request: FastifyRequest<{ Body: UserSessionDTO }>)
+   private async GenerateToken(user: User | null, reply: FastifyReply, request: FastifyRequest<{ Body: UserSessionDTO }>)
    {
       const body = request.body;
 
       if (user && user.TwoFactorEnabled)
           return new LoginUserViewModel(null, user.Uuid, user.Username, user.ProfilePic);
+
+      const refreshToken = RefreshTokenService.generateRefreshToken();
+      await RefreshTokenService.StoreRefreshToken(user!.Uuid, refreshToken);
 
       const token = reply.server.jwt.sign({
          uuid: user?.Uuid,
@@ -46,7 +50,16 @@ export class LoginSessionCommandHandler implements BaseHandlerCommand<UserSessio
          secure: true,
          sameSite: 'lax',
          path: '/',
+         maxAge: 86400 // 1 dia
       });
+
+      reply.setCookie('refreshToken', refreshToken, {
+         httpOnly: true,
+         secure: true,
+         sameSite: 'lax',
+         path: '/',
+         maxAge: 604800 // 7 dias
+      })
 
       return new LoginUserViewModel(token, user?.Uuid, user?.Username, user?.ProfilePic);
    }
