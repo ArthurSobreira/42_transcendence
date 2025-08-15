@@ -219,23 +219,23 @@ async function sendRemoteMatchHistory(gameId: string, playerIds: string[], elimi
         const positions: { [key: string]: { username: string, points: number } } = {};
         
         if (winnerId) {
-            positions['player1'] = { username: playerNames[winnerId], points: 1 };
+            positions['player1'] = { uuid: playerNames[winnerId], points: 1 };
         }
         
         const secondPlaceCandidates = eliminationOrder.filter(id => id !== winnerId);
         if (secondPlaceCandidates.length >= 1) {
             const secondPlaceId = secondPlaceCandidates[secondPlaceCandidates.length - 1];
-            positions['player2'] = { username: playerNames[secondPlaceId], points: 2 };
+            positions['player2'] = { uuid: playerNames[secondPlaceId], points: 2 };
         }
         
         if (secondPlaceCandidates.length >= 2) {
             const thirdPlaceId = secondPlaceCandidates[secondPlaceCandidates.length - 2];
-            positions['player3'] = { username: playerNames[thirdPlaceId], points: 3 };
+            positions['player3'] = { uuid: playerNames[thirdPlaceId], points: 3 };
         }
         
         if (secondPlaceCandidates.length >= 3) {
             const fourthPlaceId = secondPlaceCandidates[0];
-            positions['player4'] = { username: playerNames[fourthPlaceId], points: 4 };
+            positions['player4'] = { uuid: playerNames[fourthPlaceId], points: 4 };
         }
 
         const historyData = {
@@ -308,7 +308,7 @@ export function startGame(playerIds: string[]) {
         const client = clients.get(id)!;
         return {
             id: id,
-            username: client.username,
+            uuid: client.username,
             realUsername: client.realUsername || client.username,
         };
     });

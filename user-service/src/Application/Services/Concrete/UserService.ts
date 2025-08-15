@@ -123,7 +123,7 @@ export class UserService implements BaseService<any,  boolean>
             await this.UpdateStatsValidator.Validator(command);
             await this.UpdateStatsHandler.Handle(command);
 
-            return Result.Success(`Stats from ${command.player1Username} and ${command.player2Username} updated successfully`);
+            return Result.Success(`Stats from ${command.player1Uuid} and ${command.player2Uuid} updated successfully`);
         }
         catch (error)
         {

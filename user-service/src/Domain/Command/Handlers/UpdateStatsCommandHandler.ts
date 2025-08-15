@@ -37,8 +37,8 @@ export class UpdateStatsCommandHandler implements BaseHandlerCommand<UpdateStats
 
     private static async UpdateStatsForTwoPlayers(command: UpdateStatsCommand, userRepository: UserRepository, notificationError: NotificationError): Promise<void>
     {
-        const usersList: string[] = [command.player1Username, command.player2Username];
-        const usersEntities: User[] = await userRepository.GetUsersEntitiesByUsername(usersList);
+        const usersList: string[] = [command.player1Uuid, command.player2Uuid];
+        const usersEntities: User[] = await userRepository.GetUsersEntitiesByUuid(usersList);
 
         if (!usersEntities)
         {
@@ -56,8 +56,8 @@ export class UpdateStatsCommandHandler implements BaseHandlerCommand<UpdateStats
 
     private static async UpdateStatsForFourPlayers(command: UpdateStatsCommand, userRepository: UserRepository, notificationError: NotificationError): Promise<void>
     {
-        const usersList: (string | null)[] = [command.player1Username, command.player2Username, command.player3Username, command.player4Username];
-        const usersEntities: User[] = await userRepository.GetUsersEntitiesByUsername(usersList as string[]);
+        const usersList: (string | null)[] = [command.player1Uuid, command.player2Uuid, command.player3Uuid, command.player4Uuid];
+        const usersEntities: User[] = await userRepository.GetUsersEntitiesByUuid(usersList as string[]);
 
         if (!usersEntities)
         {
@@ -78,17 +78,17 @@ export class UpdateStatsCommandHandler implements BaseHandlerCommand<UpdateStats
         type usersInfo = [string | null, number | null];
 
         const usersList: usersInfo[] = [
-            [command.player1Username, command.player1Points] as usersInfo,
-            [command.player2Username, command.player2Points] as usersInfo,
-            [command.player3Username, command.player3Points] as usersInfo,
-            [command.player4Username, command.player4Points] as usersInfo
-        ].filter(([username, points]) => username !== null && points !== null)
+            [command.player1Uuid, command.player1Points] as usersInfo,
+            [command.player2Uuid, command.player2Points] as usersInfo,
+            [command.player3Uuid, command.player3Points] as usersInfo,
+            [command.player4Uuid, command.player4Points] as usersInfo
+        ].filter(([uuid, points]) => uuid !== null && points !== null)
             .sort((a, b) => (b[1] as number) - (a[1] as number));
 
         const players: User[] = [];
         for (let i: number = 0; i < usersList.length; i++)
         {
-            const player: User | undefined = usersEntities.find(user => user.Username === usersList[i][0]);
+            const player: User | undefined = usersEntities.find(user => user.Uuid === usersList[i][0]);
             if (player)
                 players.push(player);
         }

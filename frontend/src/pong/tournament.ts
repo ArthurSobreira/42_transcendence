@@ -15,15 +15,15 @@ async function getUserProfile(): Promise<{ username: string, profilePic: string 
   try {
     const response = await fetchWithAuth('/users/me');
     if (!response.ok) {
-      return { username: 'Anônimo', profilePic: 'https://placehold.co/128x128/000000/FFFFFF?text=User' };
+      return { uuid: 'Anônimo', profilePic: 'https://placehold.co/128x128/000000/FFFFFF?text=User' };
     }
     const user = await response.json();
     return {
-        username: user.Username || 'Anônimo',
+        uuid: user.Username || 'Anônimo',
         profilePic: user.ProfilePic || 'https://placehold.co/128x128/000000/FFFFFF?text=User'
     };
   } catch (error) {
-    return { username: 'Anônimo', profilePic: 'https://placehold.co/128x128/000000/FFFFFF?text=User' };
+    return { uuid: 'Anônimo', profilePic: 'https://placehold.co/128x128/000000/FFFFFF?text=User' };
   }
 }
 

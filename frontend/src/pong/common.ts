@@ -201,11 +201,11 @@ export async function getUserProfile(): Promise<{ username: string, profilePic: 
     const user = await response.json();
 
     return {
-      username: user.Username || t().defaultPlayer + ' 1',
+      uuid: user.Username || t().defaultPlayer + ' 1',
       profilePic: user.ProfilePic || 'https://placehold.co/128x128/000000/FFFFFF?text=P1'
     };
   } catch {
-    return { username: t().defaultPlayer + ' 1', profilePic: 'https://placehold.co/128x128/000000/FFFFFF?text=P1' };
+    return { uuid: t().defaultPlayer + ' 1', profilePic: 'https://placehold.co/128x128/000000/FFFFFF?text=P1' };
   }
 }
 
@@ -216,22 +216,22 @@ export async function getCachoraoProfile(): Promise<{ username: string, profileP
 
 
     if (!response.ok) {
-      return { username: 'Cachorrao', profilePic: '/img/cachorrao.jpg' };
+      return { uuid: 'Cachorrao', profilePic: '/img/cachorrao.jpg' };
     }
     
     const userResponse = await fetch('/api/users?username=cachorrao');
     
     if (!userResponse.ok) {
-      return { username: 'Cachorrao', profilePic: '/img/cachorrao.jpg' };
+      return { uuid: 'Cachorrao', profilePic: '/img/cachorrao.jpg' };
     }
     
     const user = await userResponse.json();
     return { 
-      username: user.Username || 'Cachorrao',
+      uuid: user.Username || 'Cachorrao',
       profilePic: user.ProfilePic || '/img/cachorrao.jpg'
     };
   } catch (error) {
     console.error('Erro ao buscar perfil do Cachorrao:', error);
-    return { username: 'Cachorrao', profilePic: '/img/cachorrao.jpg' };
+    return { uuid: 'Cachorrao', profilePic: '/img/cachorrao.jpg' };
   }
 }

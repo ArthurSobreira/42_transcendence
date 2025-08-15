@@ -136,10 +136,10 @@ export class UserController extends BaseController {
     const query = request.body;
     const statsDTO: UpdateStatsDTO = new UpdateStatsDTO(
         query.gameType,
-        query.player1Username,
-        query.player2Username,
-        query.player3Username,
-        query.player4Username,
+        query.player1Uuid,
+        query.player2Uuid,
+        query.player3Uuid,
+        query.player4Uuid,
         query.player1Points,
         query.player2Points,
         query.player3Points,

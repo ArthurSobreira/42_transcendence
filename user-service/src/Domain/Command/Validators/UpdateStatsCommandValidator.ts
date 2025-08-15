@@ -19,7 +19,7 @@ export class UpdateStatsCommandValidator implements BaseValidator<UpdateStatsCom
 
     public async Validator(command: UpdateStatsCommand): Promise<void>
     {
-        const usersList: (string | null)[] = [command.player1Username, command.player2Username, command.player3Username, command.player4Username];
+        const usersList: (string | null)[] = [command.player1Uuid, command.player2Uuid, command.player3Uuid, command.player4Uuid];
 
         if (command.player1Points < 0 || command.player2Points < 0)
             this.notificationError.AddError(ErrorCatalog.NegativePoints);

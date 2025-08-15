@@ -201,9 +201,9 @@ export class UserRepository implements IBaseRepository<GetUserQueryDTO, User> {
         );
     }
 
-    public async GetUsersEntitiesByUsername(usernames: string[]): Promise<User[]>
+    public async GetUsersEntitiesByUuid(uuids: string[]): Promise<User[]>
     {
-        const usersData = await this.prisma.user.findMany({where: {username: {in: usernames}}});
+        const usersData = await this.prisma.user.findMany({where: {uuid: {in: uuids}}});
 
         if (!usersData.length)
             return [];
