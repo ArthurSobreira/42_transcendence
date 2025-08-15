@@ -55,6 +55,29 @@ export class UserServiceClient implements IUserServiceClient
         }
     }
 
+    public async VerifyIfUsersExistsByUuids(uuids: (string | null)[]): Promise<any>
+    {
+        try
+        {
+            const validUuids = uuids.filter(user => user != null && user != '');
+
+            if (validUuids.length === 0)
+                return false;
+
+            const response = await axios.get( `${this.baseUrl}/users/exists/uuids`, {
+                params: { uuids: validUuids },
+                paramsSerializer: params => stringify(params, { arrayFormat: 'repeat' })
+            });
+            return response.data;
+        }
+        catch (error)
+        {
+            if (axios.isAxiosError(error) && error.response?.status === 404)
+                return false;
+            throw error;
+        }
+    }
+
     public async VerifyIfUserExistsByUsername(username: string): Promise<any>
     {
         try

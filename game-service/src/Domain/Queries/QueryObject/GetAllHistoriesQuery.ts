@@ -11,6 +11,6 @@ export class GetAllHistoriesQuery
 
     public static fromDTO(dto: GetAllTournamentsDTO): GetAllHistoriesQuery
     {
-        return new GetAllHistoriesQuery(dto.username);
+        return new GetAllHistoriesQuery(dto.userUuid);
     }
 }

@@ -4,7 +4,7 @@ import {NotificationError} from "../../../Shared/Errors/NotificationError";
 import {ErrorCatalog} from "../../../Shared/Errors/ErrorCatalog";
 import {DeleteTournamentCommand} from "../CommandObject/DeleteTournamentCommand";
 
-export class DeleteUserCommandValidator implements BaseValidator<DeleteTournamentCommand>
+export class DeleteTournamentCommandValidator implements BaseValidator<DeleteTournamentCommand>
 {
     constructor(private tournamentRepository: TournamentRepository, private NotificationError: NotificationError)
     {
@@ -13,6 +13,6 @@ export class DeleteUserCommandValidator implements BaseValidator<DeleteTournamen
     public async Validator(command: DeleteTournamentCommand)
     {
         if (!await this.tournamentRepository.VerifyIfTournamentExistsByUUID(command.tournamentUuid))
-            this.NotificationError.AddError(ErrorCatalog.UserNotFound);
+            this.NotificationError.AddError(ErrorCatalog.TournamentNotFound);
     }
 }

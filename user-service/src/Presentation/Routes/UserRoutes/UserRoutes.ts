@@ -56,6 +56,18 @@ const optsUsernamesChecker = {
   }
 };
 
+const optsUuidsChecker = {
+    schema: {
+        querystring: {
+            type: 'object',
+            required: ['uuids'],
+            properties: {
+                usernames: { type: 'array', items: { type: 'string' } }
+            }
+        }
+    }
+};
+
 const updateStatsOpts = {
     schema: {
         body: {
@@ -95,7 +107,7 @@ export const UserRoutes = async (server: any, userController: UserController) =>
         return await userController.GetUser(request, reply);
     });
 
-    server.get('/users/exists/uuids', optsChecker, async (request: FastifyRequest<{ Querystring: { uuids: (string | null)[] }}>, reply: FastifyReply) => {
+    server.get('/users/exists/uuids', optsUuidsChecker, async (request: FastifyRequest<{ Querystring: { uuids: (string | null)[] }}>, reply: FastifyReply) => {
         return await userController.VerifyIfUsersExistsByUuids(request, reply);
     })
 

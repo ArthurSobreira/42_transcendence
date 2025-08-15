@@ -1,9 +1,9 @@
 export class GetAllTournamentsDTO
 {
-    public readonly username: string;
+    public readonly userUuid: string;
 
-    constructor(username: string)
+    constructor(userUuid: string)
     {
-        this.username = username;
+        this.userUuid = userUuid;
     }
 }

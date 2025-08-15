@@ -40,7 +40,7 @@ export class GenerateMatchmakingQueryValidator implements BaseValidator<Generate
         }
         catch (error)
         {
-            this.notificationError.AddError(ErrorCatalog.InternalBackendApiErrorVerifyIfUsersExistsByUsername);
+            this.notificationError.AddError(ErrorCatalog.InternalBackendApiErrorVerifyIfUsersExistsByUuids);
         }
     }
 }

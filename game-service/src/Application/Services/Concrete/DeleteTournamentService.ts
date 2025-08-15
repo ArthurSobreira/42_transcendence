@@ -2,7 +2,7 @@ import {FastifyReply} from "fastify";
 import {BaseService} from "../Interfaces/BaseService.js";
 import {NotificationError} from "../../../Shared/Errors/NotificationError.js";
 import {TournamentRepository} from "../../../Infrastructure/Persistence/Repositories/Concrete/TournamentRepository.js";
-import {DeleteUserCommandValidator} from "../../../Domain/Command/Validators/DeleteUserCommandValidator.js";
+import {DeleteTournamentCommandValidator} from "../../../Domain/Command/Validators/DeleteTournamentCommandValidator";
 import {DeleteTournamentCommandHandler} from "../../../Domain/Command/Handlers/DeleteTournamentCommandHandler.js";
 import {Result} from "../../../Shared/Utils/Result.js";
 import {ValidationException} from "../../../Shared/Errors/ValidationException.js";
@@ -16,12 +16,12 @@ export class DeleteTournamentService implements BaseService<DeleteTournamentDTO>
 {
     private tournamentRepository: TournamentRepository;
     private deleteTournamentHandler: DeleteTournamentCommandHandler;
-    private deleteUserCommandValidator: DeleteUserCommandValidator;
+    private deleteUserCommandValidator: DeleteTournamentCommandValidator;
 
     constructor(notificationError: NotificationError)
     {
         this.tournamentRepository = new TournamentRepository();
-        this.deleteUserCommandValidator = new DeleteUserCommandValidator(this.tournamentRepository, notificationError);
+        this.deleteUserCommandValidator = new DeleteTournamentCommandValidator(this.tournamentRepository, notificationError);
         this.deleteTournamentHandler = new DeleteTournamentCommandHandler(this.tournamentRepository, notificationError);
     }
 

@@ -11,6 +11,6 @@ export class GetAllTournamentsQuery
 
     public static fromDTO(queryDTO: GetAllTournamentsDTO): GetAllTournamentsQuery
     {
-        return new GetAllTournamentsQuery(queryDTO.username);
+        return new GetAllTournamentsQuery(queryDTO.userUuid);
     }
 }

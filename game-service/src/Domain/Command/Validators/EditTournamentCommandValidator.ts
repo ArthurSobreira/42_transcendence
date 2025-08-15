@@ -36,16 +36,16 @@ export class EditTournamentCommandValidator implements BaseValidator<EditTournam
     {
         try {
             const usersList: string[] = [
-                command.player1Username,
-                command.player2Username,
-                command.player3Username,
-                command.player4Username,
+                command.player1Uuid,
+                command.player2Uuid,
+                command.player3Uuid,
+                command.player4Uuid,
             ].filter(uuid => uuid != null && uuid !== '');
 
             if (usersList.length < 4)
                 this.NotificationError.AddError(ErrorCatalog.InvalidNumberOfParticipants);
 
-            const exists: boolean = await this.backendApiClient.VerifyIfUsersExistsByUsername(usersList);
+            const exists: boolean = await this.backendApiClient.VerifyIfUsersExistsByUuids(usersList);
 
             if (!exists)
                 this.NotificationError.AddError(ErrorCatalog.UserNotFound);

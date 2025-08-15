@@ -22,9 +22,9 @@ export class EditTournamentCommandHandler implements BaseHandlerCommand<EditTour
     private async ChangeFields(tournament: Tournament, command: EditTournamentCommand): Promise<void>
     {
        tournament.tournamentName = command.tournamentName;
-       tournament.player1Username = command.player1Username;
-       tournament.player2Username = command.player2Username;
-       tournament.player3Username = command.player3Username;
-       tournament.player4Username = command.player4Username;
+       tournament.player1Uuid = command.player1Uuid;
+       tournament.player2Uuid = command.player2Uuid;
+       tournament.player3Uuid = command.player3Uuid;
+       tournament.player4Uuid = command.player4Uuid;
     }
 }

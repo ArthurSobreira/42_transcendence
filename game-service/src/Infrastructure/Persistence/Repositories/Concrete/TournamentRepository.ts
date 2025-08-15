@@ -12,10 +12,10 @@ export class TournamentRepository implements IBaseRepository<GetTournamentQueryD
             data: {
                 tournamentUuid: tournamentEntity.tournamentUuid,
                 tournamentName: tournamentEntity.tournamentName,
-                player1Username: tournamentEntity.player1Username,
-                player2Username: tournamentEntity.player2Username,
-                player3Username: tournamentEntity.player3Username,
-                player4Username: tournamentEntity.player4Username,
+                player1Uuid: tournamentEntity.player1Uuid,
+                player2Uuid: tournamentEntity.player2Uuid,
+                player3Uuid: tournamentEntity.player3Uuid,
+                player4Uuid: tournamentEntity.player4Uuid,
                 aliasPlayer1: tournamentEntity.aliasPlayer1,
                 aliasPlayer2: tournamentEntity.aliasPlayer2,
                 aliasPlayer3: tournamentEntity.aliasPlayer3,
@@ -30,10 +30,10 @@ export class TournamentRepository implements IBaseRepository<GetTournamentQueryD
             where: {tournamentUuid: _uuid},
             data: {
                 tournamentName: tournamentEntity?.tournamentName,
-                player1Username: tournamentEntity?.player1Username,
-                player2Username: tournamentEntity?.player2Username,
-                player3Username: tournamentEntity?.player3Username,
-                player4Username: tournamentEntity?.player4Username,
+                player1Uuid: tournamentEntity?.player1Uuid,
+                player2Uuid: tournamentEntity?.player2Uuid,
+                player3Uuid: tournamentEntity?.player3Uuid,
+                player4Uuid: tournamentEntity?.player4Uuid,
             },
         });
     }
@@ -53,10 +53,10 @@ export class TournamentRepository implements IBaseRepository<GetTournamentQueryD
         return tournamentsData.map((tournament) => Tournament.fromDatabase(
             tournament.tournamentUuid,
             tournament.tournamentName,
-            tournament.player1Username,
-            tournament.player2Username,
-            tournament.player3Username,
-            tournament.player4Username,
+            tournament.player1Uuid,
+            tournament.player2Uuid,
+            tournament.player3Uuid,
+            tournament.player4Uuid,
             tournament.aliasPlayer1,
             tournament.aliasPlayer2,
             tournament.aliasPlayer3,
@@ -73,10 +73,10 @@ export class TournamentRepository implements IBaseRepository<GetTournamentQueryD
         const entity = Tournament.fromDatabase(
             tournamentData.tournamentUuid,
             tournamentData.tournamentName,
-            tournamentData.player1Username,
-            tournamentData.player2Username,
-            tournamentData.player3Username,
-            tournamentData.player4Username,
+            tournamentData.player1Uuid,
+            tournamentData.player2Uuid,
+            tournamentData.player3Uuid,
+            tournamentData.player4Uuid,
             tournamentData.aliasPlayer1,
             tournamentData.aliasPlayer2,
             tournamentData.aliasPlayer3,
@@ -95,10 +95,10 @@ export class TournamentRepository implements IBaseRepository<GetTournamentQueryD
         return Tournament.fromDatabase(
             tournamentData.tournamentUuid,
             tournamentData.tournamentName,
-            tournamentData.player1Username,
-            tournamentData.player2Username,
-            tournamentData.player3Username,
-            tournamentData.player4Username,
+            tournamentData.player1Uuid,
+            tournamentData.player2Uuid,
+            tournamentData.player3Uuid,
+            tournamentData.player4Uuid,
             tournamentData.aliasPlayer1,
             tournamentData.aliasPlayer2,
             tournamentData.aliasPlayer3,
@@ -106,15 +106,15 @@ export class TournamentRepository implements IBaseRepository<GetTournamentQueryD
         );
     }
 
-    public async GetAllTournaments(username?: string): Promise<GetTournamentQueryDTO[]>
+    public async GetAllTournaments(uuid?: string): Promise<GetTournamentQueryDTO[]>
     {
        const tournaments = await prisma.tournament.findMany({
-           where: username? {
+           where: uuid? {
                OR: [
-                   {player1Username: username},
-                   {player2Username: username},
-                   {player3Username: username},
-                   {player4Username: username}
+                   {player1Uuid: uuid},
+                   {player2Uuid: uuid},
+                   {player3Uuid: uuid},
+                   {player4Uuid: uuid}
                ]
            } : {}
        });
@@ -123,10 +123,10 @@ export class TournamentRepository implements IBaseRepository<GetTournamentQueryD
            this.mapToQueryDTO(Tournament.fromDatabase(
                tournament.tournamentUuid,
                tournament.tournamentName,
-               tournament.player1Username,
-               tournament.player2Username,
-               tournament.player3Username,
-               tournament.player4Username,
+               tournament.player1Uuid,
+               tournament.player2Uuid,
+               tournament.player3Uuid,
+               tournament.player4Uuid,
                tournament.aliasPlayer1,
                tournament.aliasPlayer2,
                tournament.aliasPlayer3,
@@ -143,10 +143,10 @@ export class TournamentRepository implements IBaseRepository<GetTournamentQueryD
         return new GetTournamentQueryDTO(
             tournamentEntity.tournamentUuid,
             tournamentEntity.tournamentName,
-            tournamentEntity.player1Username,
-            tournamentEntity.player2Username,
-            tournamentEntity.player3Username,
-            tournamentEntity.player4Username,
+            tournamentEntity.player1Uuid,
+            tournamentEntity.player2Uuid,
+            tournamentEntity.player3Uuid,
+            tournamentEntity.player4Uuid,
             tournamentEntity.aliasPlayer1,
             tournamentEntity.aliasPlayer2,
             tournamentEntity.aliasPlayer3,

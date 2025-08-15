@@ -65,14 +65,14 @@ export class CreateHistoryValidator implements BaseValidator<CreateHistoryComman
             if (userList.length < 2)
                 this.NotificationError.AddError(ErrorCatalog.InvalidNumberOfParticipantsHistory);
 
-            const exists = await this.backendApiClient.VerifyIfUsersExistsByUsername(userList);
+            const exists = await this.backendApiClient.VerifyIfUsersExistsByUuids(userList);
 
             if (!exists)
                 this.NotificationError.AddError(ErrorCatalog.UserNotFound);
         }
         catch (error)
         {
-            this.NotificationError.AddError(ErrorCatalog.InternalBackendApiErrorVerifyIfUsersExistsByUsername);
+            this.NotificationError.AddError(ErrorCatalog.InternalBackendApiErrorVerifyIfUsersExistsByUuids);
         }
     }
 }
