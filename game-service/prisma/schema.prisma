@@ -24,24 +24,24 @@ model Tournament {
 }
 
 model History {
-    id              String   @id @default(uuid())
-    historyUuid     String   @unique
-    tournamentId    String?
-    tournamentName  String?
-    gameType        String?
-    player1Username String
-    player1Alias    String?
-    player1Points   Int
-    player2Username String
-    player2Alias    String?
-    player2Points   Int
-    player3Username String?
-    player3Alias    String?
-    player3Points   Int?
-    player4Username String?
-    player4Alias    String?
-    player4Points   Int?
-    matchedAt       DateTime @default(now())
+    id             String   @id @default(uuid())
+    historyUuid    String   @unique
+    tournamentId   String?
+    tournamentName String?
+    gameType       String?
+    player1Uuid    String
+    player1Alias   String?
+    player1Points  Int
+    player2Uuid    String
+    player2Alias   String?
+    player2Points  Int
+    player3Uuid    String?
+    player3Alias   String?
+    player3Points  Int?
+    player4Uuid    String?
+    player4Alias   String?
+    player4Points  Int?
+    matchedAt      DateTime @default(now())
 
     @@unique([tournamentId])
     @@map("history")
