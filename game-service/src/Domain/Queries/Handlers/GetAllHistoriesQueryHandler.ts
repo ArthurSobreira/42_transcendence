@@ -12,7 +12,7 @@ export class GetAllHistoriesQueryHandler implements BaseHandlerQuery<GetAllHisto
 
     async Handle(query: GetAllHistoriesQuery): Promise<GetAllHistoriesQueryDTO[] | null>
     {
-        const historyData = await this.historyRepository.GetAllHistoriesByUsername(query.username);
+        const historyData = await this.historyRepository.GetAllHistoriesByUsername(query.userUuid);
 
         if (!historyData) {
             return null;

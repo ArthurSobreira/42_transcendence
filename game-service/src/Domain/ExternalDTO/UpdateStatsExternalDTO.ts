@@ -3,26 +3,26 @@ import {GameTypeEnum} from "../../Application/Enum/GameTypeEnum";
 export class UpdateStatsExternalDTO
 {
     public readonly gameType: GameTypeEnum;
-    public readonly player1Username: string;
+    public readonly player1Uuid: string;
     public readonly player1Points: number;
-    public readonly player2Username: string;
+    public readonly player2Uuid: string;
     public readonly player2Points: number;
-    public readonly player3Username: string | null;
+    public readonly player3Uuid: string | null;
     public readonly player3Points: number | null;
-    public readonly player4Username: string | null;
+    public readonly player4Uuid: string | null;
     public readonly player4Points: number | null;
 
-    constructor(gameType: GameTypeEnum, player1Username: string, player1Points: number, player2Username: string, player2Points: number,
-                player3Username: string | null, player3Points: number | null, player4Username: string | null, player4Points: number | null)
+    constructor(gameType: GameTypeEnum, player1Uuid: string, player1Points: number, player2Uuid: string, player2Points: number,
+                player3Uuid: string | null, player3Points: number | null, player4Uuid: string | null, player4Points: number | null)
     {
         this.gameType = gameType;
-        this.player1Username = player1Username;
+        this.player1Uuid = player1Uuid;
         this.player1Points = player1Points;
-        this.player2Username = player2Username;
+        this.player2Uuid = player2Uuid;
         this.player2Points = player2Points;
-        this.player3Username = player3Username;
+        this.player3Uuid = player3Uuid;
         this.player3Points = player3Points;
-        this.player4Username = player4Username;
+        this.player4Uuid = player4Uuid;
         this.player4Points = player4Points;
     }
 }

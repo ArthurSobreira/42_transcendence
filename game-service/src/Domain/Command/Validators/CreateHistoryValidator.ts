@@ -41,10 +41,10 @@ export class CreateHistoryValidator implements BaseValidator<CreateHistoryComman
     private VerifyIfPlayerIsPlayingAgainstSelf(command: CreateHistoryCommand): boolean
     {
         const players: (string | null)[] = [
-            command.player1Username,
-            command.player2Username,
-            command.player3Username,
-            command.player4Username
+            command.player1Uuid,
+            command.player2Uuid,
+            command.player3Uuid,
+            command.player4Uuid
         ].filter(username => username != null && username !== '');
 
         const set = new Set(players);
@@ -56,10 +56,10 @@ export class CreateHistoryValidator implements BaseValidator<CreateHistoryComman
         try
         {
             const userList: (string | null)[] = [
-                command.player1Username,
-                command.player2Username,
-                command.player3Username,
-                command.player4Username
+                command.player1Uuid,
+                command.player2Uuid,
+                command.player3Uuid,
+                command.player4Uuid
             ].filter(username => username != null && username !== '');
 
             if (userList.length < 2)

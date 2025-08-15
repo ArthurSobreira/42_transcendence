@@ -23,29 +23,29 @@ export class CreateHistoryCommandHandler implements BaseHandlerCommand<CreateHis
             command.tournamentId,
             command.tournamentName,
             command.gameType.toString(),
-            command.player1Username,
+            command.player1Uuid,
             command.player1Alias,
             command.player1Points,
-            command.player2Username,
+            command.player2Uuid,
             command.player2Alias,
             command.player2Points,
-            command.player3Username,
+            command.player3Uuid,
             command.player3Alias,
             command.player3Points,
-            command.player4Username,
+            command.player4Uuid,
             command.player4Alias,
             command.player4Points
         );
 
         const addStatsAfterMatch: UpdateStatsExternalDTO = new UpdateStatsExternalDTO(
             command.gameType,
-            command.player1Username,
+            command.player1Uuid,
             command.player1Points,
-            command.player2Username,
+            command.player2Uuid,
             command.player2Points,
-            command.player3Username,
+            command.player3Uuid,
             command.player3Points,
-            command.player4Username,
+            command.player4Uuid,
             command.player4Points
         );
         await this.backendApiClient.UpdateStatsForUsers(addStatsAfterMatch);

@@ -2,11 +2,11 @@ import {GetAllTournamentsDTO} from "../../../Application/DTO/ToQuery/GetAllTourn
 
 export class GetAllHistoriesQuery
 {
-    public readonly username: string;
+    public readonly userUuid: string;
 
-    constructor(username: string)
+    constructor(userUuid: string)
     {
-        this.username = username;
+        this.userUuid = userUuid;
     }
 
     public static fromDTO(dto: GetAllTournamentsDTO): GetAllHistoriesQuery
