@@ -38,7 +38,7 @@ export class TournamentController extends BaseController
     public async CreateTournament(request: FastifyRequest<{ Body: CreateTournamentDTO }>, reply: FastifyReply)
     {
         const body = request.body;
-        const createTournamentDTO: CreateTournamentDTO = new CreateTournamentDTO(body.tournamentName, body.player1Username, body.player2Username, body.player3Username, body.player4Username,
+        const createTournamentDTO: CreateTournamentDTO = new CreateTournamentDTO(body.tournamentName, body.player1Uuid, body.player2Uuid, body.player3Uuid, body.player4Uuid,
             body.aliasPlayer1, body.aliasPlayer2, body.aliasPlayer3, body.aliasPlayer4);
         const result = await this.createTournament.Execute(createTournamentDTO, reply);
         return this.handleResult(result, reply, this.notificationError);
@@ -47,7 +47,7 @@ export class TournamentController extends BaseController
     public async EditTournament(request: FastifyRequest<{ Body: EditTournamentDTO }>, reply: FastifyReply)
     {
         const body = request.body;
-        const editTournamentDTO: EditTournamentDTO = new EditTournamentDTO(body.tournamentUuid, body.tournamentName, body.player1Username, body.player2Username, body.player3Username, body.player4Username);
+        const editTournamentDTO: EditTournamentDTO = new EditTournamentDTO(body.tournamentUuid, body.tournamentName, body.player1Uuid, body.player2Uuid, body.player3Uuid, body.player4Uuid);
         const result: Result = await this.editTournament.Execute(editTournamentDTO, reply);
         return this.handleResult(result, reply, this.notificationError);
     }
@@ -71,7 +71,7 @@ export class TournamentController extends BaseController
     public async GetAllTournaments(request: FastifyRequest<{ Querystring: GetAllTournamentsDTO }>, reply: FastifyReply)
     {
         const query = request.query;
-        const getAllTournamentsDTO: GetAllTournamentsDTO = new GetAllTournamentsDTO(query.username);
+        const getAllTournamentsDTO: GetAllTournamentsDTO = new GetAllTournamentsDTO(query.userUuid);
         const result: Result<GetAllTournamentsViewModel[]> = await this.getAllTournament.Execute(getAllTournamentsDTO, reply);
         return this.handleResult(result, reply, this.notificationError);
     }

@@ -16,31 +16,31 @@ export class HistoryRepository implements IBaseRepository<GetAllHistoriesQueryDT
                 tournamentId: entity.tournamentId,
                 tournamentName: entity.tournamentName,
                 gameType: entity.gameType,
-                player1Username: entity.player1Username,
+                player1Uuid: entity.player1Uuid,
                 player1Alias: entity.player1Alias,
                 player1Points: entity.player1Points,
-                player2Username: entity.player2Username,
+                player2Uuid: entity.player2Uuid,
                 player2Alias: entity.player2Alias,
                 player2Points: entity.player2Points,
-                player3Username: entity.player3Username,
+                player3Uuid: entity.player3Uuid,
                 player3Alias: entity.player3Alias,
                 player3Points: entity.player3Points,
-                player4Username: entity.player4Username,
+                player4Uuid: entity.player4Uuid,
                 player4Alias: entity.player4Alias,
                 player4Points: entity.player4Points,
             }
         });
     }
 
-    public async GetAllHistoriesByUsername(username: string): Promise<any[]>
+    public async GetAllHistoriesByUuid(uuid: string): Promise<any[]>
     {
         const historyData = await prisma.history.findMany({
-            where: username? {
+            where: uuid? {
                 OR: [
-                    {player1Username: username},
-                    {player2Username: username},
-                    {player3Username: username},
-                    {player4Username: username},
+                    {player1Uuid: uuid},
+                    {player2Uuid: uuid},
+                    {player3Uuid: uuid},
+                    {player4Uuid: uuid},
                 ]
             } : {}
         });
