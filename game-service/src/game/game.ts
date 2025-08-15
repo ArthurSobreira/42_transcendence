@@ -308,7 +308,7 @@ export function startGame(playerIds: string[]) {
         const client = clients.get(id)!;
         return {
             id: id,
-            uuid: client.username,
+            username: client.username,
             realUsername: client.realUsername || client.username,
         };
     });
