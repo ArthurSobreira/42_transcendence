@@ -116,7 +116,7 @@ export function stopGame(gameId: string) {
                     tournament.eliminatedPlayers.push({
                         id: loserId,
                         realUsername: loser.realUsername || loser.username,
-                        username: loser.username // uuid?
+                        uuid: loser.username
                     });
                 }
             }
@@ -310,7 +310,7 @@ export function setupWebSocket(server: any) {
 
 		const clientData: ClientData = {
 			ws,
-            username: username, // uuid?
+			uuid: username,
 			realUsername,
 			inputs: {},
 			id: userId,
