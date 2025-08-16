@@ -20,8 +20,8 @@ services:
   user-service:
     build: user-service
     environment:
-      DATABASE_URL: "file:/usr/src/app/prisma/dev.db"
-      JWT_SECRET: "transcendence"
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
     volumes:
       - user-service-prisma-data:/usr/src/app/prisma
     ports:
@@ -35,9 +35,9 @@ services:
   auth-service:
     build: ./auth-service
     environment:
-      DATABASE_URL: "file:/usr/src/app/prisma/auth.db"
-      JWT_SECRET: "transcendence"
-      GOOGLE_CLIENT_ID: "298539346397-imm2ctlgievdlfb7vff3pdsh2291itjk.apps.googleusercontent.com"
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     ports:
       - "3000:3000"
     volumes:
@@ -48,10 +48,10 @@ services:
   game-service:
     build: game-service
     environment:
-      DATABASE_URL: "file:/usr/src/app/prisma/game.db"
-      JWT_SECRET: "transcendence"
-      BACKEND_API_URL: "http://user-service:8080"
-      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      BACKEND_API_URL: ${BACKEND_API_URL}
+      NODE_TLS_REJECT_UNAUTHORIZED: ${NODE_TLS_REJECT_UNAUTHORIZED}
     ports:
       - "3001:3001"
       - "5556:5556"
