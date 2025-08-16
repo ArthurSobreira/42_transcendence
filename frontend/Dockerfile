@@ -1,6 +1,9 @@
 FROM node:20-alpine AS build-stage
 WORKDIR /app
 
+ARG GOOGLE_CLIENT_ID
+ENV VITE_GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+
 COPY frontend/package.json frontend/yarn.lock* frontend/package-lock.json* ./
 RUN npm install
 

@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: frontend/Dockerfile
+    environment:
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     ports:
       - "80:80"
       - "443:443"
