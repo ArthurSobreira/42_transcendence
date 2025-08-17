@@ -11,9 +11,12 @@ services:
     volumes:
       - ./devops/nginx/ssl:/etc/nginx/ssl:ro
     depends_on:
-      - user-service
-      - auth-service
-      - game-service
+      user-service:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      game-service:
+        condition: service_healthy
     networks:
       - app-network
 
@@ -28,9 +31,16 @@ services:
       - "9229:9229"
       - "5555:5555"
     depends_on:
-      - auth-service
+      auth-service:
+        condition: service_healthy
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5555"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   auth-service:
     build: ./auth-service
@@ -46,6 +56,12 @@ services:
       - auth-prisma-data:/usr/src/app/prisma
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   game-service:
     build: game-service
@@ -62,6 +78,12 @@ services:
       - ./devops/nginx/ssl:/usr/src/app/ssl:ro
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5556"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   ngrok-service:
     build: ngrok-service

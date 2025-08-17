@@ -1,0 +1,7 @@
+# Ignorar dependências locais, forçando a instalação dentro do container
+node_modules
+
+# Arquivos de log e de ambiente que não devem ir para a imagem
+npm-debug.log
+.env
+.DS_Store

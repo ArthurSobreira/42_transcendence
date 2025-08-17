@@ -33,6 +33,10 @@ server.after(() => {
   console.log(server.printRoutes());
 });
 
+server.get('/health', async (request, reply) => {
+  return { status: 'ok' };
+});
+
 const start = async () => {
   try {
     if (!authOptions.GOOGLE_CLIENT_ID || !authOptions.JWT_SECRET) {
