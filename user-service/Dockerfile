@@ -7,25 +7,11 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma 
 
-ARG DATABASE_USER_URL
-ARG JWT_SECRET
-
-ENV DATABASE_USER_URL=${DATABASE_USER_URL}
-ENV JWT_SECRET=${JWT_SECRET}
-
 RUN npm install
 
 RUN npx prisma generate
 
 COPY . .
-
-EXPOSE 8080
-
-#Debug
-EXPOSE 9229
-
-#Prisma Studio
-EXPOSE 5555
 
 ENTRYPOINT ["./entrypoint.sh"]
 

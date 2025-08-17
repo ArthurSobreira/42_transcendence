@@ -7,16 +7,6 @@ RUN npm install
 
 COPY . .
 
-ARG DATABASE_AUTH_POSTGRES_URL
-ARG JWT_SECRET
-ARG GOOGLE_CLIENT_ID
-ARG GAME_SERVICE_URL
-
-ENV DATABASE_AUTH_POSTGRES_URL=${DATABASE_AUTH_POSTGRES_URL}
-ENV JWT_SECRET=${JWT_SECRET}
-ENV GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-ENV GAME_SERVICE_URL=${GAME_SERVICE_URL}
-
 RUN npx prisma generate
 
 RUN npm run build
@@ -30,7 +20,5 @@ COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/package*.json ./
 
 COPY --from=build /usr/src/app/prisma ./prisma
-
-EXPOSE 3000
 
 CMD [ "npm", "start" ]
