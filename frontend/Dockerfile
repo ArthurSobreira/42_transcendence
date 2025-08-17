@@ -1,11 +1,8 @@
-FROM node:20-alpine AS build-stage
+FROM node:24-alpine AS build-stage
 WORKDIR /app
 
 COPY frontend/package.json frontend/yarn.lock* frontend/package-lock.json* ./
 RUN npm install
-
-ARG VITE_GOOGLE_CLIENT_ID
-ENV VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
 
 COPY frontend/. .
 RUN npm run build
@@ -15,6 +12,3 @@ RUN rm /etc/nginx/conf.d/default.conf
 
 COPY devops/nginx/frontend.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-
-EXPOSE 80
-EXPOSE 443

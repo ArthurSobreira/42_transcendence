@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: frontend/Dockerfile
-      args: 
-        - VITE_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+    environment:
+      VITE_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     ports:
       - "8080:80"
       - "8443:443"
@@ -94,6 +94,15 @@ services:
       - "4040:4040"
     networks:
       - app-network
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:4040"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+        start_period: 30s
+    depends_on:
+      user-service:
+        condition: service_healthy
 
 networks:
   app-network:
