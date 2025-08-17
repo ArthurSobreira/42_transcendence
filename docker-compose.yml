@@ -63,6 +63,16 @@ services:
     networks:
       - app-network
 
+  ngrok-service:
+    build: ngrok-service
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+      NGROK_PORT: ${NGROK_PORT}
+    ports:
+      - "4040:4040"
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge

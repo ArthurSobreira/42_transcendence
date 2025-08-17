@@ -1,4 +1,5 @@
 import { fetchWithAuth } from '../api/api';
+import { WEBSOCKET_BASE_URL } from '../utils/constants';
 import { t } from '../i18n';
 import {
   initSharedState, stopSharedState, draw, keys,
@@ -93,7 +94,9 @@ export async function initRemoteGame() {
   const payload = JSON.parse(atob(token.split('.')[1]));
   const userId = payload.uuid;
 
-  ws = new WebSocket(`wss://localhost:3001?userId=${userId}&username=${encodeURIComponent(username)}&profilePic=${encodeURIComponent(profilePic)}&mode=remote&token=${encodeURIComponent(token)}`);
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const host = window.location.host;
+  ws = new WebSocket(`${protocol}//${host}${WEBSOCKET_BASE_URL}?userId=${userId}&username=${encodeURIComponent(username)}&profilePic=${encodeURIComponent(profilePic)}&mode=remote&token=${encodeURIComponent(token)}`);
 
   ws.onopen = () => {
       console.log(`WebSocket conectado como ${username}.`);

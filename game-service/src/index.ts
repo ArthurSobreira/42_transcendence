@@ -28,7 +28,7 @@ async function main() {
 
 
     server.register(fastifyJwt, {
-        secret: process.env.JWT_SECRET || 'transcendence'
+        secret: process.env.JWT_SECRET || ''
     });
 
     server.register(helmet, {
@@ -43,7 +43,7 @@ async function main() {
     });
 
     server.register(fastifyCors, {
-        origin: "https://localhost",
+        origin: "https://localhost:8443",
         methods: ["GET", "POST", "PUT", "DELETE"],
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization']
